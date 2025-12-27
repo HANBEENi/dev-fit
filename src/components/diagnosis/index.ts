@@ -1,5 +1,6 @@
 export { default as DiagnosisIntro } from './DiagnosisIntro';
-export { default as QuestionCard } from './QuestionCard';
+export { default as LikertQuestionCard } from './LikertQuestionCard';
+export { default as StressQuestionCard } from './StressQuestionCard';
 export { default as ResultCard } from './ResultCard';
 export { default as ResultActions } from './ResultActions';
 export { default as TypeDistributionChart } from './TypeDistributionChart';

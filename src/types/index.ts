@@ -55,17 +55,31 @@ export interface StressType {
   recovery: string;
 }
 
-// 질문 선택지
-export interface QuestionOption {
-  text: string;
-  value: DevTypeId | StressTypeId;
-}
-
-// 질문
-export interface Question {
+// 리커트 척도 질문 (유형 측정용)
+export interface LikertQuestion {
   id: number;
   text: string;
-  options: QuestionOption[];
+  targetType: DevTypeId;
+  reverse?: boolean; // 역채점 여부
+}
+
+// 시나리오 질문 (기존 방식, 스트레스용으로 유지)
+export interface ScenarioQuestion {
+  id: number;
+  text: string;
+  options: {
+    text: string;
+    value: StressTypeId;
+  }[];
+}
+
+// 통합 타입
+export type Question = LikertQuestion | ScenarioQuestion;
+
+// 리커트 응답
+export interface LikertResponse {
+  questionId: number;
+  score: number; // 1-5
 }
 
 // 진단 결과 점수

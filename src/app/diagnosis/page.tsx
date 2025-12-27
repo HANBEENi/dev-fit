@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useDiagnosis } from '@/hooks/useDiagnosis';
 import {
   DiagnosisIntro,
-  QuestionCard,
+  LikertQuestionCard,
+  StressQuestionCard,
   ResultCard,
   ResultActions,
   TypeDistributionChart,
@@ -17,21 +18,23 @@ import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
 export default function DiagnosisPage() {
   const {
     phase,
-    currentQuestion,
-    shuffledOptions,
+    currentLikertQuestion,
+    currentStressQuestion,
+    shuffledStressOptions,
     totalProgress,
     totalQuestions,
     resultDevType,
     resultStressType,
     typeDistribution,
     startTest,
-    selectAnswer,
+    submitLikertAnswer,
+    submitStressAnswer,
     resetTest,
   } = useDiagnosis();
 
   // GA 이벤트 추적
   useEffect(() => {
-    if (phase === 'basic' && totalProgress === 1) {
+    if (phase === 'likert' && totalProgress === 1) {
       trackDiagnosisStart();
     }
     if (phase === 'result' && resultDevType && resultStressType) {
@@ -58,26 +61,33 @@ export default function DiagnosisPage() {
       <div className='relative z-10'>
         {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
 
-        {(phase === 'basic' || phase === 'stress') && currentQuestion && (
-          <QuestionCard
-            questionNumber={totalProgress}
-            questionText={currentQuestion.text}
-            options={shuffledOptions}
+        {phase === 'likert' && currentLikertQuestion && (
+          <LikertQuestionCard
+            question={currentLikertQuestion}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
-            phase={phase}
-            onSelect={selectAnswer}
+            onSelect={submitLikertAnswer}
+          />
+        )}
+
+        {phase === 'stress' && currentStressQuestion && (
+          <StressQuestionCard
+            question={currentStressQuestion}
+            options={shuffledStressOptions}
+            currentProgress={totalProgress}
+            totalQuestions={totalQuestions}
+            onSelect={submitStressAnswer}
           />
         )}
 
         {phase === 'result' && resultDevType && resultStressType && (
           <>
-            {/* 유형 분포 차트 (결과 최상단) */}
+            {/* 유형 분포 차트 */}
             <div className='mx-auto max-w-lg'>
               <TypeDistributionChart distribution={typeDistribution} />
             </div>
 
-            {/* 기존 결과 카드 */}
+            {/* 결과 카드 */}
             <ResultCard
               devType={DEV_TYPES[resultDevType]}
               stressType={STRESS_TYPES[resultStressType]}
