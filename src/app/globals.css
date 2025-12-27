@@ -1,26 +1,60 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-dark: #0f0a1f;
+  --bg-card: #1a1330;
+  --bg-inner: #231a3d;
+  --accent-purple: #a855f7;
+  --accent-pink: #ec4899;
+  --accent-mint: #00d4aa;
+  --accent-blue: #3b82f6;
+  --accent-orange: #f59e0b;
+  --accent-red: #ef4444;
+  --text-white: #f0f0f5;
+  --text-gray: #b8b8c8;
+  --text-muted: #7a7a8c;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-white);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-purple);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-pink);
+}
+
+/* 선택 영역 스타일링 */
+::selection {
+  background: var(--accent-purple);
+  color: white;
 }
