@@ -1,16 +1,23 @@
 'use client';
 
+import { useRef, useState } from 'react';
+import html2canvas from 'html2canvas';
 import { Button } from '@/components/common';
-import { DevType } from '@/types';
+import { DevType, TypeDistribution } from '@/types';
 import { shareContent, copyToClipboard } from '@/lib/utils';
 import { trackShare } from '@/lib/gtag';
+import ResultImageCard from './ResultImageCard';
 
 interface ResultActionsProps {
   devType: DevType;
+  distribution: TypeDistribution[];
   onRestart: () => void;
 }
 
-export default function ResultActions({ devType, onRestart }: ResultActionsProps) {
+export default function ResultActions({ devType, distribution, onRestart }: ResultActionsProps) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
   const handleShare = async () => {
     const text = `🧬 나의 개발자 협업 성향
 
@@ -35,14 +42,52 @@ ${devType.desc.slice(0, 80)}...
     }
   };
 
+  const handleDownloadImage = async () => {
+    if (!cardRef.current || isGenerating) return;
+
+    setIsGenerating(true);
+
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: '#0f0a1f',
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      });
+
+      const link = document.createElement('a');
+      link.download = `devfit-${devType.id}-result.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      trackShare('image_download', 'diagnosis_result');
+    } catch (error) {
+      console.error('이미지 생성 실패:', error);
+      alert('이미지 생성에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
-    <div className='mx-auto mt-6 max-w-lg space-y-3'>
-      <Button fullWidth size='lg' onClick={onRestart}>
-        다시 진단하기
-      </Button>
-      <Button fullWidth size='lg' variant='secondary' onClick={handleShare}>
-        결과 공유하기
-      </Button>
-    </div>
+    <>
+      {/* 숨겨진 이미지 카드 (캡처용) */}
+      <div className='fixed -left-[9999px] top-0'>
+        <ResultImageCard ref={cardRef} devType={devType} distribution={distribution} />
+      </div>
+
+      {/* 버튼들 */}
+      <div className='mx-auto mt-6 max-w-lg space-y-3'>
+        <Button fullWidth size='lg' onClick={handleDownloadImage} disabled={isGenerating}>
+          {isGenerating ? '이미지 생성 중...' : '📷 결과 이미지 저장'}
+        </Button>
+        <Button fullWidth size='lg' variant='secondary' onClick={handleShare}>
+          📤 결과 공유하기
+        </Button>
+        <Button fullWidth size='lg' variant='ghost' onClick={onRestart}>
+          🔄 다시 진단하기
+        </Button>
+      </div>
+    </>
   );
 }

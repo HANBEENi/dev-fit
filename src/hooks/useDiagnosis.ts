@@ -1,10 +1,16 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { DevTypeId, StressTypeId, DevTypeScores, StressTypeScores } from '../types';
-import { initDevTypeScores, initStressTypeScores, getTopType, shuffleArray } from '../lib/utils';
-import { BASIC_QUESTIONS, STRESS_QUESTIONS } from '../data/questions';
-import { TEST_CONFIG } from '../constants';
+import { useState, useCallback, useMemo } from 'react';
+import {
+  DevTypeId,
+  StressTypeId,
+  DevTypeScores,
+  StressTypeScores,
+  TypeDistribution,
+} from '@/types';
+import { initDevTypeScores, initStressTypeScores, getTopType, shuffleArray } from '@/lib/utils';
+import { BASIC_QUESTIONS, STRESS_QUESTIONS } from '@/data/questions';
+import { TEST_CONFIG } from '@/constants';
 
 export type DiagnosisPhase = 'intro' | 'basic' | 'stress' | 'result';
 
@@ -40,6 +46,28 @@ export function useDiagnosis() {
       ? state.currentIndex + 1
       : TEST_CONFIG.basicQuestionCount + state.currentIndex + 1;
 
+  // 유형 분포 계산 (정렬된 순위)
+  const typeDistribution = useMemo((): TypeDistribution[] => {
+    const scores = state.devTypeScores;
+    const totalScore = Object.values(scores).reduce((sum, s) => sum + s, 0);
+
+    const distribution = Object.entries(scores)
+      .map(([id, score]) => ({
+        id: id as DevTypeId,
+        score,
+        percentage: totalScore > 0 ? Math.round((score / totalScore) * 100) : 0,
+        rank: 0,
+      }))
+      .sort((a, b) => b.score - a.score);
+
+    // 순위 부여
+    distribution.forEach((item, index) => {
+      item.rank = index + 1;
+    });
+
+    return distribution;
+  }, [state.devTypeScores]);
+
   // 테스트 시작
   const startTest = useCallback(() => {
     setState({
@@ -69,7 +97,6 @@ export function useDiagnosis() {
       // 다음 단계 결정
       if (isLastQuestion) {
         if (isBasicPhase) {
-          // 기본 질문 완료 → 스트레스 질문으로
           return {
             ...prev,
             phase: 'stress',
@@ -77,7 +104,6 @@ export function useDiagnosis() {
             devTypeScores: newDevTypeScores,
           };
         } else {
-          // 스트레스 질문 완료 → 결과
           const resultDevType = getTopType(newDevTypeScores);
           const resultStressType = getTopType(newStressTypeScores);
           return {
@@ -91,7 +117,6 @@ export function useDiagnosis() {
         }
       }
 
-      // 다음 질문으로
       return {
         ...prev,
         currentIndex: prev.currentIndex + 1,
@@ -115,6 +140,8 @@ export function useDiagnosis() {
     totalQuestions: TEST_CONFIG.totalQuestionCount,
     resultDevType: state.resultDevType,
     resultStressType: state.resultStressType,
+    devTypeScores: state.devTypeScores,
+    typeDistribution,
     startTest,
     selectAnswer,
     resetTest,

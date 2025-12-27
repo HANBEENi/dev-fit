@@ -104,3 +104,19 @@ export interface TypeAdvice {
     level?: 'critical' | 'warning';
   }>;
 }
+
+// 결과 점수 분포
+export interface TypeDistribution {
+  id: DevTypeId;
+  score: number;
+  percentage: number;
+  rank: number;
+}
+
+// 피드백
+export interface FeedbackData {
+  accuracy: number; // 1-5
+  resultType: DevTypeId;
+  stressType: StressTypeId;
+  timestamp: number;
+}
