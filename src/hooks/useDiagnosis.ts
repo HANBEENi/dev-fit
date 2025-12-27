@@ -17,11 +17,16 @@ import { TEST_CONFIG } from '@/constants';
 
 export type DiagnosisPhase = 'intro' | 'likert' | 'stress' | 'result';
 
+interface StressResponse {
+  questionId: number;
+  value: StressTypeId;
+}
+
 interface DiagnosisState {
   phase: DiagnosisPhase;
   currentIndex: number;
   likertResponses: LikertResponse[];
-  stressTypeScores: StressTypeScores;
+  stressResponses: StressResponse[];
   resultDevType: DevTypeId | null;
   resultStressType: StressTypeId | null;
 }
@@ -30,7 +35,7 @@ const initialState: DiagnosisState = {
   phase: 'intro',
   currentIndex: 0,
   likertResponses: [],
-  stressTypeScores: initStressTypeScores(),
+  stressResponses: [],
   resultDevType: null,
   resultStressType: null,
 };
@@ -43,7 +48,6 @@ function calculateDevTypeScores(responses: LikertResponse[]): DevTypeScores {
     const question = LIKERT_QUESTIONS.find((q) => q.id === response.questionId);
     if (!question) continue;
 
-    // 역채점인 경우 점수 반전 (6 - score)
     const effectiveScore = question.reverse ? 6 - response.score : response.score;
     scores[question.targetType] += effectiveScore;
   }
@@ -51,9 +55,20 @@ function calculateDevTypeScores(responses: LikertResponse[]): DevTypeScores {
   return scores;
 }
 
-// 정규화된 분포 계산 (0-100%)
+// 스트레스 점수 계산
+function calculateStressScores(responses: StressResponse[]): StressTypeScores {
+  const scores = initStressTypeScores();
+
+  for (const response of responses) {
+    scores[response.value] += 1;
+  }
+
+  return scores;
+}
+
+// 정규화된 분포 계산
 function calculateDistribution(scores: DevTypeScores): TypeDistribution[] {
-  const maxPossiblePerType = 4 * 5; // 4문항 × 최대 5점 = 20점
+  const maxPossiblePerType = 4 * 5;
 
   const distribution = Object.entries(scores)
     .map(([id, score]) => ({
@@ -71,13 +86,11 @@ function calculateDistribution(scores: DevTypeScores): TypeDistribution[] {
   return distribution;
 }
 
-// 최고 점수 유형 찾기 (동점 시 랜덤)
+// 최고 점수 유형 찾기
 function getTopType(scores: DevTypeScores): DevTypeId {
   const entries = Object.entries(scores) as [DevTypeId, number][];
   const maxScore = Math.max(...entries.map(([_, s]) => s));
   const topTypes = entries.filter(([_, s]) => s === maxScore).map(([id]) => id);
-
-  // 동점이면 랜덤 선택
   return topTypes[Math.floor(Math.random() * topTypes.length)];
 }
 
@@ -85,14 +98,13 @@ function getTopStressType(scores: StressTypeScores): StressTypeId {
   const entries = Object.entries(scores) as [StressTypeId, number][];
   const maxScore = Math.max(...entries.map(([_, s]) => s));
   const topTypes = entries.filter(([_, s]) => s === maxScore).map(([id]) => id);
-
   return topTypes[Math.floor(Math.random() * topTypes.length)];
 }
 
 export function useDiagnosis() {
   const [state, setState] = useState<DiagnosisState>(initialState);
 
-  // 셔플된 리커트 질문 (한 번만 생성)
+  // 셔플된 리커트 질문 (컴포넌트 마운트 시 한 번만)
   const [shuffledLikertQuestions] = useState(() => shuffleArray(LIKERT_QUESTIONS));
 
   // 현재 질문
@@ -114,6 +126,23 @@ export function useDiagnosis() {
         ? LIKERT_QUESTION_COUNT + state.currentIndex + 1
         : 0;
 
+  // 현재 질문에 대한 이전 응답 (수정 시 표시용)
+  const currentLikertAnswer = useMemo(() => {
+    if (!currentLikertQuestion) return null;
+    const response = state.likertResponses.find((r) => r.questionId === currentLikertQuestion.id);
+    return response?.score ?? null;
+  }, [currentLikertQuestion, state.likertResponses]);
+
+  const currentStressAnswer = useMemo(() => {
+    if (!currentStressQuestion) return null;
+    const response = state.stressResponses.find((r) => r.questionId === currentStressQuestion.id);
+    return response?.value ?? null;
+  }, [currentStressQuestion, state.stressResponses]);
+
+  // 이전으로 갈 수 있는지
+  const canGoBack =
+    (state.phase === 'likert' && state.currentIndex > 0) || state.phase === 'stress';
+
   // 점수 계산
   const devTypeScores = useMemo(
     () => calculateDevTypeScores(state.likertResponses),
@@ -128,7 +157,7 @@ export function useDiagnosis() {
       ...initialState,
       phase: 'likert',
       likertResponses: [],
-      stressTypeScores: initStressTypeScores(),
+      stressResponses: [],
     });
   }, []);
 
@@ -137,7 +166,10 @@ export function useDiagnosis() {
     (score: number) => {
       setState((prev) => {
         const question = shuffledLikertQuestions[prev.currentIndex];
-        const newResponses = [...prev.likertResponses, { questionId: question.id, score }];
+
+        // 기존 응답 제거 후 새 응답 추가
+        const filteredResponses = prev.likertResponses.filter((r) => r.questionId !== question.id);
+        const newResponses = [...filteredResponses, { questionId: question.id, score }];
 
         const isLastLikert = prev.currentIndex >= LIKERT_QUESTION_COUNT - 1;
 
@@ -163,22 +195,24 @@ export function useDiagnosis() {
   // 스트레스 응답 제출
   const submitStressAnswer = useCallback((value: StressTypeId) => {
     setState((prev) => {
-      const newStressScores = {
-        ...prev.stressTypeScores,
-        [value]: prev.stressTypeScores[value] + 1,
-      };
+      const question = STRESS_QUESTIONS[prev.currentIndex];
+
+      // 기존 응답 제거 후 새 응답 추가
+      const filteredResponses = prev.stressResponses.filter((r) => r.questionId !== question.id);
+      const newResponses = [...filteredResponses, { questionId: question.id, value }];
 
       const isLastStress = prev.currentIndex >= STRESS_QUESTIONS.length - 1;
 
       if (isLastStress) {
         const finalDevScores = calculateDevTypeScores(prev.likertResponses);
+        const finalStressScores = calculateStressScores(newResponses);
         const resultDevType = getTopType(finalDevScores);
-        const resultStressType = getTopStressType(newStressScores);
+        const resultStressType = getTopStressType(finalStressScores);
 
         return {
           ...prev,
           phase: 'result',
-          stressTypeScores: newStressScores,
+          stressResponses: newResponses,
           resultDevType,
           resultStressType,
         };
@@ -187,8 +221,32 @@ export function useDiagnosis() {
       return {
         ...prev,
         currentIndex: prev.currentIndex + 1,
-        stressTypeScores: newStressScores,
+        stressResponses: newResponses,
       };
+    });
+  }, []);
+
+  // 이전 질문으로
+  const goBack = useCallback(() => {
+    setState((prev) => {
+      // 스트레스 첫 문항에서 뒤로 가면 리커트 마지막으로
+      if (prev.phase === 'stress' && prev.currentIndex === 0) {
+        return {
+          ...prev,
+          phase: 'likert',
+          currentIndex: LIKERT_QUESTION_COUNT - 1,
+        };
+      }
+
+      // 그 외에는 인덱스만 감소
+      if (prev.currentIndex > 0) {
+        return {
+          ...prev,
+          currentIndex: prev.currentIndex - 1,
+        };
+      }
+
+      return prev;
     });
   }, []);
 
@@ -209,9 +267,13 @@ export function useDiagnosis() {
     resultStressType: state.resultStressType,
     devTypeScores,
     typeDistribution,
+    currentLikertAnswer,
+    currentStressAnswer,
+    canGoBack,
     startTest,
     submitLikertAnswer,
     submitStressAnswer,
+    goBack,
     resetTest,
   };
 }

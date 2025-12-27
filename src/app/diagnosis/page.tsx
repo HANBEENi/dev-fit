@@ -26,9 +26,13 @@ export default function DiagnosisPage() {
     resultDevType,
     resultStressType,
     typeDistribution,
+    currentLikertAnswer,
+    currentStressAnswer,
+    canGoBack,
     startTest,
     submitLikertAnswer,
     submitStressAnswer,
+    goBack,
     resetTest,
   } = useDiagnosis();
 
@@ -66,7 +70,10 @@ export default function DiagnosisPage() {
             question={currentLikertQuestion}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
+            previousAnswer={currentLikertAnswer}
+            canGoBack={canGoBack}
             onSelect={submitLikertAnswer}
+            onBack={goBack}
           />
         )}
 
@@ -76,7 +83,10 @@ export default function DiagnosisPage() {
             options={shuffledStressOptions}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
+            previousAnswer={currentStressAnswer}
+            canGoBack={canGoBack}
             onSelect={submitStressAnswer}
+            onBack={goBack}
           />
         )}
 
