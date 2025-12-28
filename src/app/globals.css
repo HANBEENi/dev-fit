@@ -33,6 +33,10 @@ body {
   min-height: 100vh;
   line-height: 1.6;
   overflow-x: hidden;
+
+  /* 단어 단위 줄바꿈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 /* 스크롤바 스타일링 */

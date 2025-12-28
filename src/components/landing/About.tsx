@@ -6,7 +6,7 @@ export default function About() {
       <div className='mx-auto max-w-4xl px-5'>
         {/* 헤더 */}
         <div className='mb-12 text-center'>
-          <span className='mb-4 inline-block text-xs font-bold tracking-widest text-purple-400 uppercase'>
+          <span className='mb-4 inline-block text-xs font-bold uppercase tracking-widest text-purple-400'>
             About
           </span>
           <h2 className='text-3xl font-extrabold'>이 테스트는요</h2>
@@ -29,7 +29,8 @@ export default function About() {
             <h3 className='mb-4 flex items-center gap-2 text-xl font-bold'>📐 설계 기준</h3>
             <p className='leading-relaxed text-gray-400'>
               조직심리학의 상황-행동 프레임, Lazarus의 스트레스-대처 이론, 인지편향 연구를
-              참고했습니다. &quot;고정된 성격&quot;이 아닌 &quot;상황에서의 행동 경향&quot;에 초점을
+              참고했습니다.
+              <br /> &quot;고정된 성격&quot;이 아닌 &quot;상황에서의 행동 경향&quot;에 초점을
               맞췄어요.
             </p>
           </div>

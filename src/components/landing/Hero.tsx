@@ -36,14 +36,14 @@ export default function Hero() {
         </p>
 
         <div className='flex flex-wrap justify-center gap-4'>
-          <Link href='#tests'>
-            <Button variant='primary' size='lg'>
+          <Link href='#tests' className='flex-1'>
+            <Button variant='primary' size='lg' fullWidth>
               테스트 시작하기
             </Button>
           </Link>
-          <Link href='#about'>
-            <Button variant='secondary' size='lg'>
-              이게 뭔가요?
+          <Link href='#about' className='flex-1'>
+            <Button variant='secondary' size='lg' fullWidth>
+              이 테스트는 뭔가요?
             </Button>
           </Link>
         </div>
