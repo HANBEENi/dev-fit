@@ -2,7 +2,7 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 // 페이지뷰 추적
 export const pageview = (url: string) => {
-  if (typeof window !== 'undefined' && GA_ID) {
+  if (typeof window !== 'undefined' && GA_ID && window.gtag) {
     window.gtag('config', GA_ID, {
       page_path: url,
     });
@@ -11,7 +11,7 @@ export const pageview = (url: string) => {
 
 // 이벤트 추적
 export const event = (action: string, params: Record<string, unknown>) => {
-  if (typeof window !== 'undefined' && GA_ID) {
+  if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, params);
   }
 };
@@ -53,6 +53,10 @@ export const trackShare = (method: string, contentType: string) => {
 // gtag 타입 선언
 declare global {
   interface Window {
-    gtag: (command: 'config' | 'event', targetId: string, config?: Record<string, unknown>) => void;
+    gtag: (
+      command: 'config' | 'event' | 'js',
+      targetId: string | Date,
+      config?: Record<string, unknown>,
+    ) => void;
   }
 }

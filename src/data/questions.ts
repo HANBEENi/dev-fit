@@ -1,218 +1,232 @@
-import { Question, DevTypeId, StressTypeId } from '../types';
+import { LikertQuestion, ScenarioQuestion, DevTypeId, StressTypeId } from '@/types';
 
-// 행동 경향 질문 (12문항)
-export const BASIC_QUESTIONS: Question[] = [
+// ========================================
+// 행동 경향 질문 (24문항, 리커트 척도)
+// 유형당 4문항씩
+// ========================================
+
+export const LIKERT_QUESTIONS: LikertQuestion[] = [
+  // 🏗️ 구조 설계자 (structure) - 4문항
   {
     id: 1,
-    text: '새로운 프로젝트를 시작하게 되었습니다. 이 상황에서 가장 먼저 하고 싶은 행동은 무엇인가요?',
-    options: [
-      { text: '전체 구조와 아키텍처를 먼저 설계합니다', value: 'structure' as DevTypeId },
-      { text: '간단한 프로토타입을 빠르게 만들어봅니다', value: 'executor' as DevTypeId },
-      { text: '팀원들과 모여서 아이디어 회의를 합니다', value: 'collaborator' as DevTypeId },
-      { text: '기존 레퍼런스를 충분히 분석합니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '새 프로젝트를 시작할 때, 코드를 작성하기 전에 전체 구조를 먼저 설계하는 편이다.',
+    targetType: 'structure',
   },
   {
     id: 2,
-    text: '복잡한 버그를 발견했습니다. 이 상황에서 당신의 접근 방식은?',
-    options: [
-      { text: '혼자 깊이 파고들어 원인을 찾습니다', value: 'solver' as DevTypeId },
-      { text: '빠르게 여러 해결책을 시도해봅니다', value: 'executor' as DevTypeId },
-      { text: '동료에게 같이 보자고 요청합니다', value: 'collaborator' as DevTypeId },
-      { text: '로그와 데이터를 꼼꼼히 분석합니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '기술 부채가 쌓이는 것이 신경 쓰여서, 당장 급하지 않아도 리팩토링을 미리 하는 편이다.',
+    targetType: 'structure',
   },
   {
     id: 3,
-    text: '요구사항이 갑자기 크게 바뀌었습니다. 이 상황에서 당신의 첫 반응은?',
-    options: [
-      { text: '변경이 구조에 미치는 영향을 먼저 분석합니다', value: 'structure' as DevTypeId },
-      { text: '일단 바뀐 대로 빠르게 수정을 시작합니다', value: 'executor' as DevTypeId },
-      { text: '상황에 맞게 유연하게 계획을 조정합니다', value: 'flexible' as DevTypeId },
-      { text: '리스크를 점검하고 신중하게 대응합니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '코드 리뷰를 할 때 세부 구현보다 전체 설계와 아키텍처를 더 중요하게 본다.',
+    targetType: 'structure',
   },
   {
     id: 4,
-    text: '코드 리뷰를 할 때 주로 어떤 점에 집중하시나요?',
-    options: [
-      { text: '전체 설계와 구조적 일관성을 봅니다', value: 'structure' as DevTypeId },
-      { text: '일단 동작하는지, 실용적인지를 봅니다', value: 'executor' as DevTypeId },
-      { text: '대화하며 함께 개선점을 찾습니다', value: 'collaborator' as DevTypeId },
-      { text: '잠재적 버그나 예외 케이스를 찾습니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '"일단 돌아가게 만들자"는 접근보다 "제대로 설계하고 시작하자"는 쪽에 가깝다.',
+    targetType: 'structure',
   },
+
+  // 🔥 돌진형 실행가 (executor) - 4문항
   {
     id: 5,
-    text: '가장 일이 잘 되는 환경은 어떤 곳인가요?',
-    options: [
-      { text: '혼자 깊이 집중할 수 있는 환경입니다', value: 'solver' as DevTypeId },
-      { text: '빠르게 시도하고 피드백 받는 환경입니다', value: 'executor' as DevTypeId },
-      { text: '동료와 함께 일하는 환경입니다', value: 'collaborator' as DevTypeId },
-      { text: '안정적이고 예측 가능한 환경입니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '완벽하게 계획하기보다 일단 만들어보면서 방향을 잡는 게 더 효율적이라고 생각한다.',
+    targetType: 'executor',
   },
   {
     id: 6,
-    text: '팀 회의에서 당신이 주로 맡게 되는 역할은?',
-    options: [
-      { text: '큰 그림과 방향성을 제시합니다', value: 'structure' as DevTypeId },
-      { text: '빨리 결론 내고 실행하자고 합니다', value: 'executor' as DevTypeId },
-      { text: '다양한 의견을 조율하고 정리합니다', value: 'collaborator' as DevTypeId },
-      { text: '리스크와 고려사항을 짚어냅니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '회의에서 논의가 길어지면 "일단 해보고 판단하자"고 제안하는 편이다.',
+    targetType: 'executor',
   },
   {
     id: 7,
-    text: '새로운 기술을 배울 때 선호하는 방식은?',
-    options: [
-      { text: '체계적으로 기초부터 공부합니다', value: 'structure' as DevTypeId },
-      { text: '일단 만들어보면서 배웁니다', value: 'executor' as DevTypeId },
-      { text: '스터디나 동료와 함께 배웁니다', value: 'collaborator' as DevTypeId },
-      { text: '깊이 파고들어 원리를 이해합니다', value: 'solver' as DevTypeId },
-    ],
+    text: '프로토타입이나 MVP를 빠르게 만들어서 피드백 받는 방식을 선호한다.',
+    targetType: 'executor',
   },
   {
     id: 8,
-    text: '팀에서 의견 충돌이 생겼을 때 당신의 대응 방식은?',
-    options: [
-      { text: '논리와 근거로 내 의견을 설명합니다', value: 'structure' as DevTypeId },
-      { text: '빠르게 결론 내고 진행합니다', value: 'executor' as DevTypeId },
-      { text: '중간 지점을 찾아 합의를 이끕니다', value: 'collaborator' as DevTypeId },
-      { text: '상황을 보며 유연하게 대응합니다', value: 'flexible' as DevTypeId },
-    ],
+    text: '마감이 다가오면 완성도보다 일단 동작하는 결과물을 내는 것이 중요하다고 생각한다.',
+    targetType: 'executor',
   },
+
+  // 🤝 협업 촉진자 (collaborator) - 4문항
   {
     id: 9,
-    text: '문서화에 대한 당신의 생각은 어떤가요?',
-    options: [
-      { text: '중요합니다, 꼼꼼히 작성해야 합니다', value: 'structure' as DevTypeId },
-      { text: '필요하면 하지만 코드가 우선입니다', value: 'executor' as DevTypeId },
-      { text: '팀원을 위해 설명하듯 작성합니다', value: 'collaborator' as DevTypeId },
-      { text: '상황에 따라 적절히 합니다', value: 'flexible' as DevTypeId },
-    ],
+    text: '혼자 고민하기보다 동료와 함께 이야기하면서 해결책을 찾는 것을 선호한다.',
+    targetType: 'collaborator',
   },
   {
     id: 10,
-    text: '마감이 촉박한 상황에서 당신의 대응은?',
-    options: [
-      { text: '구조를 단순화해서라도 품질을 유지합니다', value: 'structure' as DevTypeId },
-      { text: '일단 돌아가게 만들고 나중에 정리합니다', value: 'executor' as DevTypeId },
-      { text: '팀원들과 역할을 나눠 함께 해결합니다', value: 'collaborator' as DevTypeId },
-      { text: '집중해서 끝까지 파고듭니다', value: 'solver' as DevTypeId },
-    ],
+    text: '팀 내 의견이 다를 때, 중간 지점을 찾아 합의를 이끌어내는 역할을 자주 맡는다.',
+    targetType: 'collaborator',
   },
   {
     id: 11,
-    text: '어려운 결정을 내려야 할 때 당신은 어떻게 하나요?',
-    options: [
-      { text: '장기적 영향을 고려해 신중하게 결정합니다', value: 'structure' as DevTypeId },
-      { text: '빠르게 결정하고 결과를 보며 조정합니다', value: 'executor' as DevTypeId },
-      { text: '팀원들의 의견을 들어보고 결정합니다', value: 'collaborator' as DevTypeId },
-      { text: '데이터와 근거를 충분히 모읍니다', value: 'analyst' as DevTypeId },
-    ],
+    text: '코드 리뷰나 설계 논의를 할 때, 일방적으로 피드백하기보다 대화하며 함께 개선하는 방식을 선호한다.',
+    targetType: 'collaborator',
   },
   {
     id: 12,
-    text: '가장 보람을 느끼는 순간은 언제인가요?',
-    options: [
-      { text: '깔끔하게 설계된 코드를 완성했을 때입니다', value: 'structure' as DevTypeId },
-      { text: '빠르게 결과물을 만들어냈을 때입니다', value: 'executor' as DevTypeId },
-      { text: '팀과 함께 문제를 해결했을 때입니다', value: 'collaborator' as DevTypeId },
-      { text: '어려운 문제를 깊이 파고들어 해결했을 때입니다', value: 'solver' as DevTypeId },
-    ],
+    text: '팀 분위기와 동료들의 컨디션에 신경을 많이 쓰는 편이다.',
+    targetType: 'collaborator',
   },
-];
 
-// 스트레스 반응 질문 (8문항)
-export const STRESS_QUESTIONS: Question[] = [
+  // 🔍 신중한 분석가 (analyst) - 4문항
   {
     id: 13,
-    text: '마감이 촉박하고 일이 밀릴 때 당신은 어떻게 반응하나요?',
-    options: [
-      {
-        text: '다른 사람에게 맡기기보다 내가 직접 처리하려고 합니다',
-        value: 'responsibility' as StressTypeId,
-      },
-      {
-        text: '할 일 목록을 정리하고 우선순위를 더 꼼꼼히 세웁니다',
-        value: 'control' as StressTypeId,
-      },
-      { text: '평소보다 말이 줄고 조용히 집중하게 됩니다', value: 'silence' as StressTypeId },
-      { text: '답답한 마음에 평소보다 말이 직설적으로 변합니다', value: 'direct' as StressTypeId },
-    ],
+    text: '결정을 내리기 전에 가능한 많은 정보와 데이터를 수집하려고 한다.',
+    targetType: 'analyst',
   },
   {
     id: 14,
-    text: '내 코드나 결정이 비판받았을 때 당신의 반응은?',
-    options: [
-      { text: '왜 그렇게 했는지 논리적으로 설명합니다', value: 'rationalize' as StressTypeId },
-      { text: '누군가와 이야기하며 감정을 나누고 싶습니다', value: 'connection' as StressTypeId },
-      { text: '더 열심히 해서 만회하려 합니다', value: 'responsibility' as StressTypeId },
-      { text: '잠시 조용히 있고 싶습니다', value: 'silence' as StressTypeId },
-    ],
+    text: '새로운 기술이나 방법을 도입할 때 충분한 검증 없이 적용하는 것이 불안하다.',
+    targetType: 'analyst',
   },
   {
     id: 15,
-    text: '예상치 못한 장애나 문제가 터지면 당신은 어떻게 하나요?',
-    options: [
-      { text: '내가 책임지고 해결하려 합니다', value: 'responsibility' as StressTypeId },
-      { text: '원인을 파악하고 절차대로 대응합니다', value: 'control' as StressTypeId },
-      { text: '빠르게 해결하려다 말이 날카로워집니다', value: 'direct' as StressTypeId },
-      { text: '왜 이렇게 됐는지 맥락을 먼저 설명합니다', value: 'rationalize' as StressTypeId },
-    ],
+    text: '코드를 작성할 때 예외 케이스와 엣지 케이스를 미리 꼼꼼히 고려하는 편이다.',
+    targetType: 'analyst',
   },
   {
     id: 16,
-    text: '팀에서 갈등이 생기면 당신은 어떻게 대응하나요?',
-    options: [
-      { text: '관계 회복을 위해 먼저 대화를 시도합니다', value: 'connection' as StressTypeId },
-      { text: '일단 거리를 두고 조용히 있습니다', value: 'silence' as StressTypeId },
-      { text: '내 입장을 논리적으로 정리해서 설명합니다', value: 'rationalize' as StressTypeId },
-      { text: '답답해서 직설적으로 말하게 됩니다', value: 'direct' as StressTypeId },
-    ],
+    text: '"빠른 실패"보다 "신중한 성공"이 더 낫다고 생각한다.',
+    targetType: 'analyst',
   },
+
+  // 🔬 몰입형 해결사 (solver) - 4문항
   {
     id: 17,
-    text: '번아웃이 오거나 지칠 때 당신은 어떻게 하나요?',
-    options: [
-      { text: '그래도 책임은 다하려고 버팁니다', value: 'responsibility' as StressTypeId },
-      { text: '규칙적인 루틴으로 나를 잡으려 합니다', value: 'control' as StressTypeId },
-      { text: '사람들과의 대화로 에너지를 얻습니다', value: 'connection' as StressTypeId },
-      { text: '혼자만의 시간이 필요합니다', value: 'silence' as StressTypeId },
-    ],
+    text: '복잡한 문제를 만나면 해결될 때까지 깊이 파고드는 것을 즐긴다.',
+    targetType: 'solver',
   },
   {
     id: 18,
-    text: '역할이 불명확하거나 기대가 애매할 때 당신의 반응은?',
-    options: [
-      { text: '일단 내가 다 맡아서 처리합니다', value: 'responsibility' as StressTypeId },
-      { text: '기준과 범위를 명확히 정하려 합니다', value: 'control' as StressTypeId },
-      { text: '불만이 쌓이다 한번에 터뜨립니다', value: 'direct' as StressTypeId },
-      { text: '상황이 정리될 때까지 조용히 기다립니다', value: 'silence' as StressTypeId },
-    ],
+    text: '어려운 버그를 추적할 때 시간 가는 줄 모르고 몰입하는 경우가 많다.',
+    targetType: 'solver',
   },
   {
     id: 19,
-    text: '내 노력이 인정받지 못한다고 느낄 때 당신은?',
-    options: [
-      { text: '왜 이렇게 했는지 설명하고 싶습니다', value: 'rationalize' as StressTypeId },
-      { text: '누군가에게 속상함을 이야기하고 싶습니다', value: 'connection' as StressTypeId },
-      { text: '더 열심히 해서 증명하려 합니다', value: 'responsibility' as StressTypeId },
-      { text: '말을 아끼고 거리를 둡니다', value: 'silence' as StressTypeId },
-    ],
+    text: '남들이 포기한 문제를 끝까지 파서 해결했을 때 큰 성취감을 느낀다.',
+    targetType: 'solver',
   },
   {
     id: 20,
-    text: '일이 내 통제를 벗어날 때 당신은 어떻게 하나요?',
+    text: '작업 중에는 방해받지 않고 혼자 집중하는 환경을 선호한다.',
+    targetType: 'solver',
+  },
+
+  // 🌊 유연한 적응자 (flexible) - 4문항
+  {
+    id: 21,
+    text: '계획이 바뀌어도 크게 스트레스 받지 않고 새로운 방향에 맞춰 조정하는 편이다.',
+    targetType: 'flexible',
+  },
+  {
+    id: 22,
+    text: '정해진 방식보다 상황에 따라 유연하게 접근하는 것이 더 효과적이라고 생각한다.',
+    targetType: 'flexible',
+  },
+  {
+    id: 23,
+    text: '팀에서 필요하다면 내 역할 범위 밖의 일도 기꺼이 맡는 편이다.',
+    targetType: 'flexible',
+  },
+  {
+    id: 24,
+    text: '원칙을 고수하는 것보다 실용적인 해결책을 찾는 것이 더 중요하다고 생각한다.',
+    targetType: 'flexible',
+  },
+];
+
+// ========================================
+// 스트레스 반응 질문 (8문항, 시나리오 방식 유지)
+// ========================================
+
+export const STRESS_QUESTIONS: ScenarioQuestion[] = [
+  {
+    id: 25,
+    text: '마감이 촉박하고 일이 밀릴 때 당신은 어떻게 반응하나요?',
     options: [
-      { text: '더 세밀하게 관리하려 합니다', value: 'control' as StressTypeId },
-      { text: '직접적으로 문제를 지적합니다', value: 'direct' as StressTypeId },
-      { text: '상황을 정리해서 이해시키려 합니다', value: 'rationalize' as StressTypeId },
-      { text: '일단 물러나서 지켜봅니다', value: 'silence' as StressTypeId },
+      { text: '다른 사람에게 맡기기보다 내가 직접 처리하려고 합니다', value: 'responsibility' },
+      { text: '할 일 목록을 정리하고 우선순위를 더 꼼꼼히 세웁니다', value: 'control' },
+      { text: '평소보다 말이 줄고 조용히 집중하게 됩니다', value: 'silence' },
+      { text: '답답한 마음에 평소보다 말이 직설적으로 변합니다', value: 'direct' },
+    ],
+  },
+  {
+    id: 26,
+    text: '내 코드나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+    options: [
+      { text: '왜 그런 선택을 했는지 배경을 설명하고 싶어집니다', value: 'rationalize' },
+      { text: '믿을 수 있는 사람에게 이야기하며 마음을 정리합니다', value: 'connection' },
+      { text: '더 잘해서 만회해야겠다는 생각이 먼저 듭니다', value: 'responsibility' },
+      { text: '일단 혼자 생각을 정리할 시간이 필요합니다', value: 'silence' },
+    ],
+  },
+  {
+    id: 27,
+    text: '예상치 못한 장애나 긴급 상황이 발생하면 당신은?',
+    options: [
+      { text: '내가 나서서 해결해야 한다는 책임감이 먼저 듭니다', value: 'responsibility' },
+      { text: '상황을 파악하고 체계적인 순서로 대응하려 합니다', value: 'control' },
+      { text: '빠르게 해결하고 싶은 마음에 말투가 급해집니다', value: 'direct' },
+      { text: '왜 이런 일이 생겼는지 원인부터 파악하려 합니다', value: 'rationalize' },
+    ],
+  },
+  {
+    id: 28,
+    text: '팀 내에서 의견 충돌이나 갈등이 생기면 당신은?',
+    options: [
+      { text: '관계가 틀어지지 않도록 먼저 대화를 시도합니다', value: 'connection' },
+      { text: '상황이 정리될 때까지 한 발 물러서서 지켜봅니다', value: 'silence' },
+      { text: '내 생각을 논리적으로 정리해서 전달하려 합니다', value: 'rationalize' },
+      { text: '돌려 말하기보다 솔직하게 이야기하는 편입니다', value: 'direct' },
+    ],
+  },
+  {
+    id: 29,
+    text: '업무가 과중하거나 지칠 때 당신은 어떻게 하나요?',
+    options: [
+      { text: '힘들어도 맡은 일은 끝까지 해내려고 합니다', value: 'responsibility' },
+      { text: '생활 패턴을 유지하며 컨디션을 관리하려 합니다', value: 'control' },
+      { text: '사람들과 이야기하면서 에너지를 충전합니다', value: 'connection' },
+      { text: '혼자만의 시간을 가지며 재충전합니다', value: 'silence' },
+    ],
+  },
+  {
+    id: 30,
+    text: '역할이 불명확하거나 기대하는 바가 애매할 때 당신은?',
+    options: [
+      { text: '일단 할 수 있는 것부터 내가 챙기게 됩니다', value: 'responsibility' },
+      { text: '범위와 기준을 명확하게 정하고 싶어집니다', value: 'control' },
+      { text: '불만이 쌓이면 어느 순간 직접적으로 표현하게 됩니다', value: 'direct' },
+      { text: '상황이 정리될 때까지 조용히 기다리는 편입니다', value: 'silence' },
+    ],
+  },
+  {
+    id: 31,
+    text: '열심히 했는데 성과가 인정받지 못한다고 느낄 때 당신은?',
+    options: [
+      { text: '어떤 과정으로 진행했는지 공유하고 싶어집니다', value: 'rationalize' },
+      { text: '속상한 마음을 누군가에게 이야기하고 싶습니다', value: 'connection' },
+      { text: '결과로 증명해야겠다는 생각에 더 몰두합니다', value: 'responsibility' },
+      { text: '티 내지 않고 조용히 넘어가는 편입니다', value: 'silence' },
+    ],
+  },
+  {
+    id: 32,
+    text: '상황이 내 예상대로 흘러가지 않을 때 당신은?',
+    options: [
+      { text: '계획을 더 세밀하게 수정하고 관리하려 합니다', value: 'control' },
+      { text: '문제점을 바로 짚어서 이야기하는 편입니다', value: 'direct' },
+      { text: '왜 이렇게 됐는지 상황을 분석하고 설명하려 합니다', value: 'rationalize' },
+      { text: '일단 지켜보면서 상황을 파악하려 합니다', value: 'silence' },
     ],
   },
 ];
 
-// 전체 질문
-export const ALL_QUESTIONS: Question[] = [...BASIC_QUESTIONS, ...STRESS_QUESTIONS];
+// 전체 문항 수
+export const LIKERT_QUESTION_COUNT = LIKERT_QUESTIONS.length; // 24
+export const STRESS_QUESTION_COUNT = STRESS_QUESTIONS.length; // 8
+export const TOTAL_QUESTION_COUNT = LIKERT_QUESTION_COUNT + STRESS_QUESTION_COUNT; // 32

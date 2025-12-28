@@ -2,7 +2,15 @@
 
 import { useEffect } from 'react';
 import { useDiagnosis } from '@/hooks/useDiagnosis';
-import { DiagnosisIntro, QuestionCard, ResultCard, ResultActions } from '@/components/diagnosis';
+import {
+  DiagnosisIntro,
+  LikertQuestionCard,
+  StressQuestionCard,
+  ResultCard,
+  ResultActions,
+  TypeDistributionChart,
+  FeedbackSection,
+} from '@/components/diagnosis';
 import { DEV_TYPES } from '@/data/types';
 import { STRESS_TYPES } from '@/data/stressTypes';
 import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
@@ -10,20 +18,27 @@ import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
 export default function DiagnosisPage() {
   const {
     phase,
-    currentQuestion,
-    shuffledOptions,
+    currentLikertQuestion,
+    currentStressQuestion,
+    shuffledStressOptions,
     totalProgress,
     totalQuestions,
     resultDevType,
     resultStressType,
+    typeDistribution,
+    currentLikertAnswer,
+    currentStressAnswer,
+    canGoBack,
     startTest,
-    selectAnswer,
+    submitLikertAnswer,
+    submitStressAnswer,
+    goBack,
     resetTest,
   } = useDiagnosis();
 
   // GA 이벤트 추적
   useEffect(() => {
-    if (phase === 'basic' && totalProgress === 1) {
+    if (phase === 'likert' && totalProgress === 1) {
       trackDiagnosisStart();
     }
     if (phase === 'result' && resultDevType && resultStressType) {
@@ -32,7 +47,7 @@ export default function DiagnosisPage() {
   }, [phase, totalProgress, resultDevType, resultStressType]);
 
   return (
-    <div className='min-h-screen px-4 pt-8 pb-16'>
+    <div className='min-h-screen px-4 pb-16 pt-8'>
       {/* 배경 */}
       <div className='pointer-events-none fixed inset-0'>
         <div
@@ -50,25 +65,55 @@ export default function DiagnosisPage() {
       <div className='relative z-10'>
         {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
 
-        {(phase === 'basic' || phase === 'stress') && currentQuestion && (
-          <QuestionCard
-            questionNumber={totalProgress}
-            questionText={currentQuestion.text}
-            options={shuffledOptions}
+        {phase === 'likert' && currentLikertQuestion && (
+          <LikertQuestionCard
+            question={currentLikertQuestion}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
-            phase={phase}
-            onSelect={selectAnswer}
+            previousAnswer={currentLikertAnswer}
+            canGoBack={canGoBack}
+            onSelect={submitLikertAnswer}
+            onBack={goBack}
+          />
+        )}
+
+        {phase === 'stress' && currentStressQuestion && (
+          <StressQuestionCard
+            question={currentStressQuestion}
+            options={shuffledStressOptions}
+            currentProgress={totalProgress}
+            totalQuestions={totalQuestions}
+            previousAnswer={currentStressAnswer}
+            canGoBack={canGoBack}
+            onSelect={submitStressAnswer}
+            onBack={goBack}
           />
         )}
 
         {phase === 'result' && resultDevType && resultStressType && (
           <>
+            {/* 유형 분포 차트 */}
+            <div className='mx-auto max-w-lg'>
+              <TypeDistributionChart distribution={typeDistribution} />
+            </div>
+
+            {/* 결과 카드 */}
             <ResultCard
               devType={DEV_TYPES[resultDevType]}
               stressType={STRESS_TYPES[resultStressType]}
             />
-            <ResultActions devType={DEV_TYPES[resultDevType]} onRestart={resetTest} />
+
+            {/* 피드백 섹션 */}
+            <div className='mx-auto max-w-lg'>
+              <FeedbackSection resultType={resultDevType} stressType={resultStressType} />
+            </div>
+
+            {/* 액션 버튼 */}
+            <ResultActions
+              devType={DEV_TYPES[resultDevType]}
+              distribution={typeDistribution}
+              onRestart={resetTest}
+            />
           </>
         )}
       </div>
