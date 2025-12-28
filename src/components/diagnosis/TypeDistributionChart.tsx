@@ -11,8 +11,14 @@ export default function TypeDistributionChart({ distribution }: TypeDistribution
   const [first, ...rest] = distribution;
   const firstType = DEV_TYPES[first.id];
 
-  // 2위 이하 중 점수가 있는 것만
-  const others = rest.filter((d) => d.score > 0);
+  // 2위 이하 중 퍼센트가 0보다 큰 것만
+  const others = rest.filter((d) => d.percentage > 0);
+
+  // 그래프 너비: 실제 퍼센트 기반, 차이를 시각적으로 강조
+  // 퍼센트를 3배로 확대하되 최대 100%
+  const getBarWidth = (percentage: number) => {
+    return Math.min(percentage * 3, 100);
+  };
 
   return (
     <Card className='mb-4'>
@@ -43,12 +49,14 @@ export default function TypeDistributionChart({ distribution }: TypeDistribution
         </div>
       </div>
 
-      {/* 2위 이하 - 비율(percentage)로 표시 */}
+      {/* 2위 이하 */}
       {others.length > 0 && (
-        <div className='space-y-2'>
+        <div className='space-y-3'>
           <p className='mb-2 text-xs text-gray-500'>함께 가진 성향</p>
           {others.map((item) => {
             const type = DEV_TYPES[item.id];
+            const barWidth = getBarWidth(item.percentage);
+
             return (
               <div key={item.id} className='flex items-center gap-3'>
                 <span className='text-xl'>{type.icon}</span>
@@ -57,17 +65,19 @@ export default function TypeDistributionChart({ distribution }: TypeDistribution
                     <span className='text-gray-400'>{type.name}</span>
                     <span className='text-gray-500'>전체의 {item.percentage}%</span>
                   </div>
-                  <div className='h-1.5 w-full overflow-hidden rounded-full bg-white/5'>
+                  <div className='h-2 w-full overflow-hidden rounded-full bg-white/5'>
                     <div
                       className={cn(
                         'h-full rounded-full transition-all duration-500',
                         item.rank === 2
-                          ? 'bg-purple-400/60'
+                          ? 'bg-purple-400'
                           : item.rank === 3
-                            ? 'bg-purple-400/40'
-                            : 'bg-purple-400/20',
+                            ? 'bg-purple-400/70'
+                            : item.rank === 4
+                              ? 'bg-purple-400/50'
+                              : 'bg-purple-400/30',
                       )}
-                      style={{ width: `${item.percentage}%` }}
+                      style={{ width: `${barWidth}%` }}
                     />
                   </div>
                 </div>
