@@ -13,7 +13,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   default: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
   personal: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
   team: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  beta: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+  beta: 'bg-purple-500/15 text-purple-400 border-purple-500/30 text-[16px]',
 };
 
 export default function Badge({ children, variant = 'default', className }: BadgeProps) {
