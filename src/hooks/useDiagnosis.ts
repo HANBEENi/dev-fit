@@ -68,13 +68,17 @@ function calculateStressScores(responses: StressResponse[]): StressTypeScores {
 
 // 정규화된 분포 계산
 function calculateDistribution(scores: DevTypeScores): TypeDistribution[] {
-  const maxPossiblePerType = 4 * 5;
+  const maxPossiblePerType = 4 * 5; // 20점
+  const totalScore = Object.values(scores).reduce((sum, s) => sum + s, 0);
 
   const distribution = Object.entries(scores)
     .map(([id, score]) => ({
       id: id as DevTypeId,
       score,
-      percentage: Math.round((score / maxPossiblePerType) * 100),
+      // 강도: 해당 유형에서 얼마나 높은 점수인지 (0~100%)
+      intensity: Math.round((score / maxPossiblePerType) * 100),
+      // 비율: 전체 중 차지하는 비중 (합계 100%)
+      percentage: totalScore > 0 ? Math.round((score / totalScore) * 100) : 0,
       rank: 0,
     }))
     .sort((a, b) => b.score - a.score);
@@ -82,6 +86,12 @@ function calculateDistribution(scores: DevTypeScores): TypeDistribution[] {
   distribution.forEach((item, index) => {
     item.rank = index + 1;
   });
+
+  // 반올림 오차 보정 (비율 합이 100이 되도록)
+  const percentageSum = distribution.reduce((sum, d) => sum + d.percentage, 0);
+  if (percentageSum !== 100 && distribution.length > 0) {
+    distribution[0].percentage += 100 - percentageSum;
+  }
 
   return distribution;
 }

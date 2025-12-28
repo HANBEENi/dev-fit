@@ -2,16 +2,26 @@
 
 import { forwardRef } from 'react';
 import { DevType, TypeDistribution } from '@/types';
+import { DEV_TYPES } from '@/data/types';
 
 interface ResultImageCardProps {
   devType: DevType;
   distribution: TypeDistribution[];
 }
 
-// 이미지 생성용 카드 (캡처 대상)
+const TYPE_ICONS: Record<string, string> = {
+  structure: '🏗️',
+  executor: '🔥',
+  collaborator: '🤝',
+  analyst: '🔍',
+  solver: '🔬',
+  flexible: '🌊',
+};
+
 const ResultImageCard = forwardRef<HTMLDivElement, ResultImageCardProps>(
   ({ devType, distribution }, ref) => {
-    const top3 = distribution.slice(0, 3);
+    const [first, ...rest] = distribution;
+    const top3Others = rest.slice(0, 3);
 
     return (
       <div
@@ -29,46 +39,34 @@ const ResultImageCard = forwardRef<HTMLDivElement, ResultImageCardProps>(
           <p className='text-sm text-purple-300'>{devType.subtitle}</p>
         </div>
 
-        {/* 분포 바 */}
-        <div className='mb-4 rounded-xl bg-white/5 p-4'>
-          <p className='mb-3 text-center text-xs text-gray-400'>나의 유형 분포</p>
-          <div className='space-y-2'>
-            {top3.map((item, index) => {
-              const type = devType.id === item.id ? devType : null;
-              const icons: Record<string, string> = {
-                structure: '🏗️',
-                executor: '🔥',
-                collaborator: '🤝',
-                analyst: '🔍',
-                solver: '🔬',
-                flexible: '🌊',
-              };
-              return (
-                <div key={item.id} className='flex items-center gap-2'>
-                  <span className='text-lg'>{icons[item.id]}</span>
-                  <div className='flex-1'>
-                    <div className='mb-1 flex justify-between text-xs'>
-                      <span className='text-gray-300'>{item.id}</span>
-                      <span className='text-purple-400'>{item.percentage}%</span>
-                    </div>
-                    <div className='h-2 w-full rounded-full bg-white/10'>
-                      <div
-                        className='h-full rounded-full'
-                        style={{
-                          width: `${item.percentage}%`,
-                          background:
-                            index === 0
-                              ? 'linear-gradient(90deg, #a855f7, #ec4899)'
-                              : index === 1
-                                ? '#a855f7'
-                                : '#6b21a8',
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        {/* 1위 강도 */}
+        <div className='mb-3 rounded-xl bg-purple-500/20 p-3'>
+          <div className='mb-1 flex justify-between text-xs'>
+            <span className='text-gray-300'>주요 성향 강도</span>
+            <span className='font-bold text-purple-400'>{first.intensity}%</span>
+          </div>
+          <div className='h-2 w-full rounded-full bg-white/10'>
+            <div
+              className='h-full rounded-full'
+              style={{
+                width: `${first.intensity}%`,
+                background: 'linear-gradient(90deg, #a855f7, #ec4899)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* 함께 가진 성향 */}
+        <div className='mb-4 rounded-xl bg-white/5 p-3'>
+          <p className='mb-2 text-xs text-gray-400'>함께 가진 성향</p>
+          <div className='space-y-1.5'>
+            {top3Others.map((item) => (
+              <div key={item.id} className='flex items-center gap-2 text-xs'>
+                <span>{TYPE_ICONS[item.id]}</span>
+                <span className='flex-1 text-gray-300'>{DEV_TYPES[item.id].name}</span>
+                <span className='text-gray-500'>전체의 {item.percentage}%</span>
+              </div>
+            ))}
           </div>
         </div>
 

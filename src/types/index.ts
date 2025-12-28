@@ -123,7 +123,8 @@ export interface TypeAdvice {
 export interface TypeDistribution {
   id: DevTypeId;
   score: number;
-  percentage: number;
+  intensity: number; // 강도: 해당 유형에서 얼마나 높은 점수인지 (0~100%)
+  percentage: number; // 비율: 전체 중 차지하는 비중 (합계 100%)
   rank: number;
 }
 
