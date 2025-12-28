@@ -50,7 +50,7 @@ export default function Button({
     <button
       className={cn(
         'inline-flex items-center justify-center gap-2',
-        'font-semibold transition-all duration-300',
+        'whitespace-nowrap font-semibold transition-all duration-300',
         'disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50',
         variantStyles[variant],
         sizeStyles[size],

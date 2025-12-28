@@ -1,13 +1,14 @@
 import { Card, Badge, Button } from '@/components/common';
+import { TEST_CONFIG } from '@/constants';
 
 interface DiagnosisIntroProps {
   onStart: () => void;
 }
 
 const features = [
-  { icon: '🎯', title: '행동 경향', desc: '상황별 선호 패턴' },
+  { icon: '🎯', title: '행동 경향', desc: '24문항 리커트 척도' },
   { icon: '⚠️', title: '인지편향', desc: '빠지기 쉬운 함정' },
-  { icon: '🔥', title: '스트레스 대처', desc: '압박 시 반응 패턴' },
+  { icon: '🔥', title: '스트레스 대처', desc: '8문항 시나리오' },
   { icon: '🤝', title: '상황별 가이드', desc: '코드리뷰, 회의, 장애대응' },
 ];
 
@@ -31,9 +32,25 @@ export default function DiagnosisIntro({ onStart }: DiagnosisIntroProps) {
         <p className='text-gray-400'>
           나는 어떤 상황에서 어떤 행동을 선택할까?
           <br />
-          20문항으로 알아보는 협업 패턴 분석
+          <strong className='text-purple-400'>{TEST_CONFIG.totalQuestionCount}문항</strong>
+          으로 알아보는 협업 패턴 분석
         </p>
       </div>
+
+      {/* 소요 시간 */}
+      <Card className='mb-4 border-purple-500/20 bg-purple-500/10 text-center'>
+        <div className='flex items-center justify-center gap-6'>
+          <div>
+            <p className='text-2xl font-black text-purple-400'>{TEST_CONFIG.totalQuestionCount}</p>
+            <p className='text-xs text-gray-500'>문항</p>
+          </div>
+          <div className='h-10 w-px bg-purple-500/30' />
+          <div>
+            <p className='text-2xl font-black text-purple-400'>5~7</p>
+            <p className='text-xs text-gray-500'>분 소요</p>
+          </div>
+        </div>
+      </Card>
 
       {/* 특징 카드 */}
       <div className='mb-6 grid grid-cols-2 gap-3'>

@@ -25,11 +25,16 @@ export const SITE_CONFIG = {
 
 // 테스트 설정
 export const TEST_CONFIG = {
-  basicQuestionCount: 12,
+  likertQuestionCount: 24,
   stressQuestionCount: 8,
-  totalQuestionCount: 20,
+  totalQuestionCount: 32,
   minTeamSize: 2,
   maxTypeCount: 10,
+  likertScale: {
+    min: 1,
+    max: 5,
+    labels: ['전혀 아니다', '아니다', '보통이다', '그렇다', '매우 그렇다'],
+  },
 } as const;
 
 // 외부 링크
