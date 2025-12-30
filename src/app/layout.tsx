@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import { Analytics, Footer, Header } from '@/components/common';
 import { SITE_CONFIG } from '@/constants';
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang='ko'>
       <body className={notoSansKr.className}>
         <Analytics />
+        <SpeedInsights />
         <Header />
         <main className='min-h-screen'>{children}</main>
         <Footer />
