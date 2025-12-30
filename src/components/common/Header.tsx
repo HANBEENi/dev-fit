@@ -2,10 +2,36 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { SITE_CONFIG } from '../../constants';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleNavClick = (hash: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsMenuOpen(false);
+
+    if (pathname === '/') {
+      const element = document.getElementById(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      router.push(`/#${hash}`);
+    }
+  };
 
   return (
     <header className='fixed top-0 right-0 left-0 z-50 border-b border-purple-500/10 bg-[#0f0a1f]/80 backdrop-blur-md'>
@@ -13,6 +39,7 @@ export default function Header() {
         {/* 로고 */}
         <Link
           href='/'
+          onClick={handleLogoClick}
           className='bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-xl font-black text-transparent'
         >
           {SITE_CONFIG.name}
@@ -20,10 +47,10 @@ export default function Header() {
 
         {/* 데스크톱 네비게이션 */}
         <nav className='hidden items-center gap-6 md:flex'>
-          <Link href='/#tests' className='text-sm text-gray-400 transition-colors hover:text-white'>
+          <Link href='/#tests' onClick={handleNavClick('tests')} className='text-sm text-gray-400 transition-colors hover:text-white'>
             테스트
           </Link>
-          <Link href='/#about' className='text-sm text-gray-400 transition-colors hover:text-white'>
+          <Link href='/#about' onClick={handleNavClick('about')} className='text-sm text-gray-400 transition-colors hover:text-white'>
             소개
           </Link>
         </nav>
@@ -58,14 +85,14 @@ export default function Header() {
               <Link
                 href='/#tests'
                 className='text-sm text-gray-400 transition-colors hover:text-white'
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleNavClick('tests')}
               >
                 테스트
               </Link>
               <Link
                 href='/#about'
                 className='text-sm text-gray-400 transition-colors hover:text-white'
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleNavClick('about')}
               >
                 소개
               </Link>

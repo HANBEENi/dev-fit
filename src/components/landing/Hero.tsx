@@ -1,5 +1,13 @@
-import Link from 'next/link';
+'use client';
+
 import { Badge, Button, Icon } from '../../components/common';
+
+const scrollToSection = (id: string) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 export default function Hero() {
   return (
@@ -36,16 +44,16 @@ export default function Hero() {
         </p>
 
         <div className='flex flex-wrap justify-center gap-4'>
-          <Link href='#tests' className='flex-1'>
-            <Button variant='primary' size='lg' fullWidth>
+          <div className='flex-1'>
+            <Button variant='primary' size='lg' fullWidth onClick={() => scrollToSection('tests')}>
               테스트 시작하기
             </Button>
-          </Link>
-          <Link href='#about' className='flex-1'>
-            <Button variant='secondary' size='lg' fullWidth>
+          </div>
+          <div className='flex-1'>
+            <Button variant='secondary' size='lg' fullWidth onClick={() => scrollToSection('about')}>
               이 테스트는 뭔가요?
             </Button>
-          </Link>
+          </div>
         </div>
       </div>
 
