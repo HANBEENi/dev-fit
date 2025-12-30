@@ -35,7 +35,11 @@ const roleOptions: Array<{
   { role: 'pm', icon: '📋', name: 'PM·기획자', desc: '기획·프로덕트 매니저' },
 ];
 
-export default function DiagnosisIntro({ onStart, selectedRole, onRoleSelect }: DiagnosisIntroProps) {
+export default function DiagnosisIntro({
+  onStart,
+  selectedRole,
+  onRoleSelect,
+}: DiagnosisIntroProps) {
   const router = useRouter();
 
   const handleStart = () => {
@@ -72,7 +76,7 @@ export default function DiagnosisIntro({ onStart, selectedRole, onRoleSelect }: 
           </div>
           <div className='h-10 w-px bg-purple-500/30' />
           <div>
-            <p className='text-2xl font-black text-purple-400'>5~7</p>
+            <p className='text-2xl font-black text-purple-400'>8~10</p>
             <p className='text-xs text-gray-500'>분 소요</p>
           </div>
         </div>
@@ -104,9 +108,7 @@ export default function DiagnosisIntro({ onStart, selectedRole, onRoleSelect }: 
       {/* 직무 선택 */}
       <Card className='mb-6'>
         <h3 className='mb-3 text-sm font-bold text-purple-400'>👤 당신의 직무를 선택하세요</h3>
-        <p className='mb-4 text-xs text-gray-500'>
-          선택한 직무에 맞춰 문항이 표시됩니다
-        </p>
+        <p className='mb-4 text-xs text-gray-500'>선택한 직무에 맞춰 문항이 표시됩니다</p>
         <div className='grid grid-cols-2 gap-3'>
           {roleOptions.map((option) => (
             <button

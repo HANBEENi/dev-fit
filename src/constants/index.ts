@@ -25,9 +25,9 @@ export const SITE_CONFIG = {
 
 // 테스트 설정
 export const TEST_CONFIG = {
-  likertQuestionCount: 24,
+  likertQuestionCount: 48,
   stressQuestionCount: 8,
-  totalQuestionCount: 32,
+  totalQuestionCount: 56,
   minTeamSize: 2,
   maxTeamSize: 15,
   maxTypeCount: 10,

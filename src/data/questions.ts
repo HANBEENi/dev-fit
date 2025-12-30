@@ -130,7 +130,7 @@ export const LIKERT_QUESTIONS: LikertQuestion[] = [
   },
   {
     id: 16,
-    text: '"빠른 실패"보다 "신중한 성공"이 더 낫다고 생각한다.',
+    text: '작은 실수라도 발생할 가능성이 보이면, 일정이 조금 늦어지더라도 미리 보완하고 넘어가는 편이다.',
     targetType: 'analyst',
   },
 
@@ -271,10 +271,10 @@ export const LIKERT_QUESTIONS: LikertQuestion[] = [
   {
     id: 35,
     text: {
-      frontend: '신입이나 주니어 개발자를 가르치고 성장하는 모습을 보면 뿌듯함을 느낀다.',
-      backend: '신입이나 주니어 개발자를 가르치고 성장하는 모습을 보면 뿌듯함을 느낀다.',
-      designer: '신입이나 주니어 디자이너를 가르치고 성장하는 모습을 보면 뿌듯함을 느낀다.',
-      pm: '신입이나 주니어 기획자를 가르치고 성장하는 모습을 보면 뿌듯함을 느낀다.',
+      frontend: '팀원이 내 도움으로 문제를 해결하고 성장하는 모습을 보면 뿌듯함을 느낀다.',
+      backend: '팀원이 내 도움으로 문제를 해결하고 성장하는 모습을 보면 뿌듯함을 느낀다.',
+      designer: '팀원이 내 도움으로 문제를 해결하고 성장하는 모습을 보면 뿌듯함을 느낀다.',
+      pm: '팀원이 내 도움으로 문제를 해결하고 성장하는 모습을 보면 뿌듯함을 느낀다.',
     },
     targetType: 'mentor',
   },
@@ -413,7 +413,12 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
   },
   {
     id: 50,
-    text: '내 코드나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+    text: {
+      frontend: '내 코드나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+      backend: '내 코드나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+      designer: '내 디자인이나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+      pm: '내 기획이나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
+    },
     options: [
       { text: '왜 그런 선택을 했는지 배경을 설명하고 싶어집니다', value: 'rationalize' },
       { text: '믿을 수 있는 사람에게 이야기하며 마음을 정리합니다', value: 'connection' },
