@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDiagnosis } from '@/hooks/useDiagnosis';
 import {
@@ -15,7 +15,7 @@ import { STRESS_TYPES } from '@/data/stressTypes';
 import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
 import { JobRole } from '@/types';
 
-export default function DiagnosisTestPage() {
+function DiagnosisTestContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roleFromUrl = searchParams.get('role') as JobRole | null;
@@ -160,5 +160,24 @@ export default function DiagnosisTestPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function DiagnosisTestPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className='min-h-screen px-4 pb-16 pt-24'>
+          <div className='flex items-center justify-center'>
+            <div className='text-center'>
+              <div className='mb-4 text-4xl'>⏳</div>
+              <p className='text-gray-400'>진단을 시작하는 중...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <DiagnosisTestContent />
+    </Suspense>
   );
 }
