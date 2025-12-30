@@ -20,6 +20,11 @@ const theories = [
 ];
 
 export default function DiagnosisIntro({ onStart }: DiagnosisIntroProps) {
+  const handleStart = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    onStart();
+  };
+
   return (
     <div className='mx-auto max-w-lg'>
       {/* 헤더 */}
@@ -76,8 +81,8 @@ export default function DiagnosisIntro({ onStart }: DiagnosisIntroProps) {
       </Card>
 
       {/* 시작 버튼 */}
-      <Button fullWidth size='lg' onClick={onStart}>
-        진단 시작하기 →
+      <Button fullWidth size='lg' onClick={handleStart}>
+        진단 시작하기
       </Button>
     </div>
   );

@@ -62,7 +62,7 @@ export default function DiagnosisPage() {
       </div>
 
       {/* 콘텐츠 */}
-      <div className='relative z-10'>
+      <div className='z-14 relative mt-12'>
         {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
 
         {phase === 'likert' && currentLikertQuestion && (
