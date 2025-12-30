@@ -27,8 +27,8 @@ const testCards: TestCardData[] = [
     description:
       '상황별 질문을 통해 나의 업무 스타일과 스트레스 대처 패턴을 진단합니다. 강점, 주의점, 인지편향까지 알려드려요.',
     meta: [
-      { icon: 'clock', text: '약 5~7분' },
-      { icon: 'question', text: '32문항' },
+      { icon: 'clock', text: '약 8~10분' },
+      { icon: 'question', text: '56문항' },
       { icon: 'user', text: '개인' },
     ],
     href: '/diagnosis',

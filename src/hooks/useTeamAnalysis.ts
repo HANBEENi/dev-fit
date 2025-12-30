@@ -105,7 +105,7 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   const optimizer = c.optimizer || 0;
 
   // 팀 이름 생성 (29가지 패턴)
-  let teamName = '🚀 개발팀';
+  let teamName = '🚀 밸런스 개발팀';
 
   // 1. 극단 케이스 (3명 이상 동일 유형) - 12가지
   if (exec >= 3) teamName = '⚡💥 초고속 기술부채 생산팀';
@@ -128,7 +128,8 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   else if (innovator >= 2 && guardian >= 1) teamName = '💡🛡️ 혁신과 안정의 균형팀';
   else if (explorer >= 2 && craftsman >= 1) teamName = '🧪⚙️ 실험과 완성도의 조화팀';
   else if (mentor >= 2 && optimizer >= 1) teamName = '🌱⚡ 성장과 효율의 시너지팀';
-  else if (exec >= 1 && guardian >= 1 && optimizer >= 1) teamName = '⚡🛡️⚡ 속도-안전-효율 삼박자팀';
+  else if (exec >= 1 && guardian >= 1 && optimizer >= 1)
+    teamName = '⚡🛡️⚡ 속도-안전-효율 삼박자팀';
   else if (struct >= 1 && analyst >= 1 && craftsman >= 1) teamName = '🏗️🔍⚙️ 완벽 추구 드림팀';
   else if (mentor >= 1 && collab >= 1 && flex >= 1) teamName = '🌱🤝🌊 최고의 팀워크팀';
   // 3. 2인 단일 유형팀 - 6가지
@@ -188,11 +189,12 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   if (mentor >= 3 && exec === 0)
     weaknesses.push('가르치는 데 집중하다 실제 개발이 지연될 수 있습니다');
   if (innovator >= 3)
-    weaknesses.push('🚨 <strong>위험:</strong> 혁신에만 몰두하다 기본 기능 구현이 소홀해질 수 있습니다');
+    weaknesses.push(
+      '🚨 <strong>위험:</strong> 혁신에만 몰두하다 기본 기능 구현이 소홀해질 수 있습니다',
+    );
   if (guardian >= 3 && exec === 0)
     weaknesses.push('안정성 검증에만 집중하다 출시 속도가 느려질 수 있습니다');
-  if (optimizer >= 3)
-    weaknesses.push('최적화에 집착하다 핵심 기능 개발이 지연될 수 있습니다');
+  if (optimizer >= 3) weaknesses.push('최적화에 집착하다 핵심 기능 개발이 지연될 수 있습니다');
   if (collab === 0 && total >= 4)
     weaknesses.push('갈등 조정자 부재로 충돌 시 해결이 어려울 수 있습니다');
   if (flex === 0 && total >= 5) weaknesses.push('변화 대응력이 부족할 수 있습니다');
@@ -494,7 +496,9 @@ function generateAdviceList(composition: TeamComposition): TypeAdvice[] {
           });
         }
         if (count >= 2) {
-          tips.push({ text: '혁신 아이디어는 주 1회 모아서 우선순위를 정하고 선택적으로 적용하세요.' });
+          tips.push({
+            text: '혁신 아이디어는 주 1회 모아서 우선순위를 정하고 선택적으로 적용하세요.',
+          });
         }
         break;
 

@@ -1,50 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useDiagnosis } from '@/hooks/useDiagnosis';
-import {
-  DiagnosisIntro,
-  LikertQuestionCard,
-  StressQuestionCard,
-  ResultCard,
-  ResultActions,
-  TypeDistributionChart,
-  FeedbackSection,
-} from '@/components/diagnosis';
-import { DEV_TYPES } from '@/data/types';
-import { STRESS_TYPES } from '@/data/stressTypes';
-import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
+import { DiagnosisIntro } from '@/components/diagnosis';
 
 export default function DiagnosisPage() {
-  const {
-    phase,
-    currentLikertQuestion,
-    currentStressQuestion,
-    shuffledStressOptions,
-    totalProgress,
-    totalQuestions,
-    resultDevType,
-    resultStressType,
-    typeDistribution,
-    currentLikertAnswer,
-    currentStressAnswer,
-    canGoBack,
-    startTest,
-    submitLikertAnswer,
-    submitStressAnswer,
-    goBack,
-    resetTest,
-  } = useDiagnosis();
-
-  // GA 이벤트 추적
-  useEffect(() => {
-    if (phase === 'likert' && totalProgress === 1) {
-      trackDiagnosisStart();
-    }
-    if (phase === 'result' && resultDevType && resultStressType) {
-      trackDiagnosisComplete(resultDevType, resultStressType);
-    }
-  }, [phase, totalProgress, resultDevType, resultStressType]);
+  const { selectedRole, selectRole, startTest } = useDiagnosis();
 
   return (
     <div className='min-h-screen px-4 pb-16 pt-24'>
@@ -63,59 +23,11 @@ export default function DiagnosisPage() {
 
       {/* 콘텐츠 */}
       <div className='z-14 relative'>
-        {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
-
-        {phase === 'likert' && currentLikertQuestion && (
-          <LikertQuestionCard
-            question={currentLikertQuestion}
-            currentProgress={totalProgress}
-            totalQuestions={totalQuestions}
-            previousAnswer={currentLikertAnswer}
-            canGoBack={canGoBack}
-            onSelect={submitLikertAnswer}
-            onBack={goBack}
-          />
-        )}
-
-        {phase === 'stress' && currentStressQuestion && (
-          <StressQuestionCard
-            question={currentStressQuestion}
-            options={shuffledStressOptions}
-            currentProgress={totalProgress}
-            totalQuestions={totalQuestions}
-            previousAnswer={currentStressAnswer}
-            canGoBack={canGoBack}
-            onSelect={submitStressAnswer}
-            onBack={goBack}
-          />
-        )}
-
-        {phase === 'result' && resultDevType && resultStressType && (
-          <>
-            {/* 유형 분포 차트 */}
-            {/* <div className='mx-auto max-w-lg'>
-              <TypeDistributionChart distribution={typeDistribution} />
-            </div> */}
-
-            {/* 결과 카드 */}
-            <ResultCard
-              devType={DEV_TYPES[resultDevType]}
-              stressType={STRESS_TYPES[resultStressType]}
-            />
-
-            {/* 피드백 섹션 */}
-            <div className='mx-auto mt-4 max-w-lg'>
-              <FeedbackSection resultType={resultDevType} stressType={resultStressType} />
-            </div>
-
-            {/* 액션 버튼 */}
-            <ResultActions
-              devType={DEV_TYPES[resultDevType]}
-              distribution={typeDistribution}
-              onRestart={resetTest}
-            />
-          </>
-        )}
+        <DiagnosisIntro
+          onStart={startTest}
+          selectedRole={selectedRole}
+          onRoleSelect={selectRole}
+        />
       </div>
     </div>
   );

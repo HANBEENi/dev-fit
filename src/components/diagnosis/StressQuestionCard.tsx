@@ -1,10 +1,11 @@
-import { ScenarioQuestion, StressTypeId } from '@/types';
+import { ScenarioQuestion, StressTypeId, JobRole } from '@/types';
 import { Card, ProgressBar } from '@/components/common';
 import { cn } from '@/lib/utils';
 
 interface StressQuestionCardProps {
   question: ScenarioQuestion;
   options: ScenarioQuestion['options'];
+  selectedRole: JobRole;
   currentProgress: number;
   totalQuestions: number;
   previousAnswer: StressTypeId | null;
@@ -18,6 +19,7 @@ const keyLabels = ['A', 'B', 'C', 'D'];
 export default function StressQuestionCard({
   question,
   options,
+  selectedRole,
   currentProgress,
   totalQuestions,
   previousAnswer,
@@ -25,6 +27,10 @@ export default function StressQuestionCard({
   onSelect,
   onBack,
 }: StressQuestionCardProps) {
+  // 직무별 텍스트 가져오기
+  const questionText =
+    typeof question.text === 'string' ? question.text : question.text[selectedRole];
+
   return (
     <div className='mx-auto max-w-lg'>
       {/* 진행 상황 */}
@@ -39,7 +45,7 @@ export default function StressQuestionCard({
 
       {/* 질문 */}
       <Card className='mb-4'>
-        <p className='text-lg font-semibold leading-relaxed'>{question.text}</p>
+        <p className='text-lg font-semibold leading-relaxed'>{questionText}</p>
       </Card>
 
       {/* 선택지 */}
