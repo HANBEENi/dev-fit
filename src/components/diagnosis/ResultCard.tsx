@@ -12,20 +12,22 @@ export default function ResultCard({ devType, stressType }: ResultCardProps) {
       {/* 메인 결과 */}
       <Card className='text-center'>
         <div className='mb-4 text-6xl'>{devType.icon}</div>
-        <h1 className='mb-1 text-2xl font-black'>{devType.name}</h1>
+        <h1 className='mb-5 text-2xl font-black'>{devType.name}</h1>
         <p className='mb-4 font-medium text-purple-400'>{devType.subtitle}</p>
 
         {/* 안내 문구 */}
-        <div className='mb-4 rounded-lg bg-purple-500/10 p-3 text-sm text-gray-400'>
+        {/* <div className='mb-4 rounded-lg bg-purple-500/10 p-3 text-sm text-gray-400'>
           ⚠️ 이 결과는 고정된 성격이 아닌,{' '}
           <strong className='text-white'>특정 상황에서 선호하는 행동 경향</strong>
           입니다.
           <br />
           상황과 맥락에 따라 다르게 행동할 수 있습니다.
-        </div>
+        </div> */}
 
         {/* 설명 */}
-        <p className='mb-6 text-sm leading-relaxed text-gray-400'>{devType.desc}</p>
+        <p className='mb-6 rounded-lg bg-[#231a3d] px-[10px] py-[20px] text-left text-sm leading-relaxed'>
+          {devType.desc}
+        </p>
 
         {/* 강점/주의점 */}
         <div className='mb-4 grid grid-cols-2 gap-3'>
