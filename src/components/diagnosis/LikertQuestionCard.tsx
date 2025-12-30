@@ -50,13 +50,13 @@ export default function LikertQuestionCard({
       {/* 리커트 척도 */}
       <div className='space-y-3'>
         {/* 라벨 */}
-        <div className='flex justify-between px-2 text-xs text-gray-500'>
-          <span>{labels[0]}</span>
-          <span>{labels[4]}</span>
+        <div className='mb-6 flex justify-between px-2 text-xs text-gray-600'>
+          <span>{labels[0]} 1</span>
+          <span>{labels[2]} 3</span>
+          <span>{labels[4]} 5</span>
         </div>
-
         {/* 버튼들 */}
-        <div className='flex justify-center gap-2 sm:gap-3'>
+        <div className='mb-6 flex justify-center gap-4 sm:gap-4'>
           {[1, 2, 3, 4, 5].map((score) => {
             const isSelected = previousAnswer === score;
             return (
@@ -84,13 +84,10 @@ export default function LikertQuestionCard({
             );
           })}
         </div>
-
-        {/* 중앙 라벨 */}
-        <div className='text-center text-xs text-gray-500'>{labels[2]}</div>
       </div>
 
       {/* 안내 + 뒤로가기 */}
-      <div className='mt-6 flex items-center justify-between'>
+      <div className='mt-10 flex items-center justify-between'>
         {canGoBack ? (
           <button
             onClick={onBack}
@@ -102,15 +99,17 @@ export default function LikertQuestionCard({
         ) : (
           <div />
         )}
-        <p className='text-xs text-gray-600'>1 = 전혀 아니다 ~ 5 = 매우 그렇다</p>
-      </div>
 
-      {/* 수정 안내 */}
-      {previousAnswer !== null && (
-        <p className='mt-4 text-center text-xs text-purple-400'>
-          ✓ 이전에 선택한 답변입니다. 다른 번호를 누르면 수정됩니다.
-        </p>
-      )}
+        {/* 수정 안내 */}
+        {previousAnswer !== null && (
+          <p className='text-center text-xs text-purple-400'>
+            ✓ 이전에 선택한 답변입니다. 다른 번호를 누르면 수정됩니다.
+          </p>
+        )}
+        <div />
+
+        {/* <p className='text-xs text-gray-700'>1 = 전혀 아니다 ~ 5 = 매우 그렇다</p> */}
+      </div>
     </div>
   );
 }
