@@ -71,10 +71,24 @@ export default function TestSelector() {
               key={card.id}
               variant='interactive'
               padding='lg'
-              className='group relative overflow-hidden'
+              className={`group relative overflow-hidden ${
+                card.id === 'team' ? 'hover:!border-orange-400 hover:!shadow-orange-400/10' : ''
+              }`}
             >
-              {/* 상단 바 (호버 시 표시) */}
-              <div className='absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 transition-opacity group-hover:opacity-100' />
+              {/* 라이트 효과 (호버 시 표시) */}
+              <div className='pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100'>
+                {card.id === 'diagnosis' ? (
+                  <>
+                    <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-purple-500/80 via-pink-500/50 to-transparent blur-3xl' />
+                    <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent' />
+                  </>
+                ) : (
+                  <>
+                    <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-orange-500/80 via-amber-500/50 to-transparent blur-3xl' />
+                    <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-200 to-transparent' />
+                  </>
+                )}
+              </div>
 
               {/* 뱃지 */}
               <Badge variant={card.badgeVariant} className='mb-4'>
