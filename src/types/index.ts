@@ -75,7 +75,7 @@ export interface LikertQuestion {
 // 시나리오 질문 (기존 방식, 스트레스용으로 유지)
 export interface ScenarioQuestion {
   id: number;
-  text: string;
+  text: string | Record<JobRole, string>; // 단일 텍스트 또는 직무별 변형
   options: {
     text: string;
     value: StressTypeId;

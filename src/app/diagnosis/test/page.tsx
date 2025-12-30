@@ -126,6 +126,7 @@ export default function DiagnosisTestPage() {
           <StressQuestionCard
             question={currentStressQuestion}
             options={shuffledStressOptions}
+            selectedRole={selectedRole}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
             previousAnswer={currentStressAnswer}
