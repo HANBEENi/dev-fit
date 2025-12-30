@@ -93,9 +93,9 @@ export default function DiagnosisPage() {
         {phase === 'result' && resultDevType && resultStressType && (
           <>
             {/* 유형 분포 차트 */}
-            <div className='mx-auto max-w-lg'>
+            {/* <div className='mx-auto max-w-lg'>
               <TypeDistributionChart distribution={typeDistribution} />
-            </div>
+            </div> */}
 
             {/* 결과 카드 */}
             <ResultCard
@@ -104,7 +104,7 @@ export default function DiagnosisPage() {
             />
 
             {/* 피드백 섹션 */}
-            <div className='mx-auto max-w-lg'>
+            <div className='mx-auto mt-4 max-w-lg'>
               <FeedbackSection resultType={resultDevType} stressType={resultStressType} />
             </div>
 
