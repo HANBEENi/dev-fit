@@ -10,6 +10,7 @@ import {
   LikertQuestion,
   ScenarioQuestion,
   LikertResponse,
+  JobRole,
 } from '@/types';
 import { initDevTypeScores, initStressTypeScores, shuffleArray } from '@/lib/utils';
 import { LIKERT_QUESTIONS, STRESS_QUESTIONS, LIKERT_QUESTION_COUNT } from '@/data/questions';
@@ -25,6 +26,7 @@ interface StressResponse {
 interface DiagnosisState {
   phase: DiagnosisPhase;
   currentIndex: number;
+  selectedRole: JobRole | null;
   likertResponses: LikertResponse[];
   stressResponses: StressResponse[];
   resultDevType: DevTypeId | null;
@@ -34,6 +36,7 @@ interface DiagnosisState {
 const initialState: DiagnosisState = {
   phase: 'intro',
   currentIndex: 0,
+  selectedRole: null,
   likertResponses: [],
   stressResponses: [],
   resultDevType: null,
@@ -161,11 +164,20 @@ export function useDiagnosis() {
 
   const typeDistribution = useMemo(() => calculateDistribution(devTypeScores), [devTypeScores]);
 
+  // 직무 선택
+  const selectRole = useCallback((role: JobRole) => {
+    setState((prev) => ({
+      ...prev,
+      selectedRole: role,
+    }));
+  }, []);
+
   // 테스트 시작
-  const startTest = useCallback(() => {
+  const startTest = useCallback((role: JobRole) => {
     setState({
       ...initialState,
       phase: 'likert',
+      selectedRole: role,
       likertResponses: [],
       stressResponses: [],
     });
@@ -268,6 +280,7 @@ export function useDiagnosis() {
   return {
     phase: state.phase,
     currentIndex: state.currentIndex,
+    selectedRole: state.selectedRole,
     currentLikertQuestion,
     currentStressQuestion,
     shuffledStressOptions,
@@ -280,6 +293,7 @@ export function useDiagnosis() {
     currentLikertAnswer,
     currentStressAnswer,
     canGoBack,
+    selectRole,
     startTest,
     submitLikertAnswer,
     submitStressAnswer,

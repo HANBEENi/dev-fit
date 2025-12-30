@@ -12,6 +12,12 @@ export async function generateMetadata({
     analyst: { name: '신중한 분석가', subtitle: '충분히 검토한 후에 움직입니다' },
     solver: { name: '몰입형 해결사', subtitle: '깊이 파고들어 답을 찾습니다' },
     flexible: { name: '유연한 적응자', subtitle: '상황에 맞게 유연하게 대응합니다' },
+    explorer: { name: '탐구형 실험가', subtitle: '새로운 기술과 방법을 탐구합니다' },
+    craftsman: { name: '완벽주의 장인', subtitle: '디테일과 품질을 완성합니다' },
+    mentor: { name: '성장 지원자', subtitle: '팀원의 성장을 이끕니다' },
+    innovator: { name: '창의적 혁신가', subtitle: '독창적인 해법을 만듭니다' },
+    guardian: { name: '안정성 수호자', subtitle: '시스템의 안정을 지킵니다' },
+    optimizer: { name: '효율 최적화자', subtitle: '성능과 효율을 개선합니다' },
   };
 
   const params = await searchParams;

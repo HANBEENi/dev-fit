@@ -34,7 +34,7 @@ export default function Header() {
   };
 
   return (
-    <header className='fixed top-0 right-0 left-0 z-50 border-b border-purple-500/10 bg-[#0f0a1f]/80 backdrop-blur-md'>
+    <header className='fixed left-0 right-0 top-0 z-50 border-b border-purple-500/10 bg-[#0f0a1f]/80 backdrop-blur-md'>
       <div className='mx-auto flex h-16 max-w-5xl items-center justify-between px-5'>
         {/* 로고 */}
         <Link
@@ -47,10 +47,18 @@ export default function Header() {
 
         {/* 데스크톱 네비게이션 */}
         <nav className='hidden items-center gap-6 md:flex'>
-          <Link href='/#tests' onClick={handleNavClick('tests')} className='text-sm text-gray-400 transition-colors hover:text-white'>
-            테스트
+          <Link
+            href='/#tests'
+            onClick={handleNavClick('tests')}
+            className='text-sm text-gray-400 transition-colors hover:text-white'
+          >
+            테스트 시작
           </Link>
-          <Link href='/#about' onClick={handleNavClick('about')} className='text-sm text-gray-400 transition-colors hover:text-white'>
+          <Link
+            href='/#about'
+            onClick={handleNavClick('about')}
+            className='text-sm text-gray-400 transition-colors hover:text-white'
+          >
             소개
           </Link>
         </nav>

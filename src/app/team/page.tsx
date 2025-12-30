@@ -37,10 +37,12 @@ export default function TeamPage() {
   const handleAnalyze = () => {
     trackTeamAnalysisStart();
     analyze();
+    // 분석 결과 페이지로 전환 시 맨 위로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className='min-h-screen px-4 pb-16 pt-8'>
+    <div className='min-h-screen px-4 pb-16 pt-24'>
       <div className='mx-auto max-w-3xl'>
         {/* 선택 화면 */}
         {phase === 'select' && (
@@ -58,33 +60,35 @@ export default function TeamPage() {
               <p className='mt-2 text-xs text-gray-600'>조직심리학 기반 협업 패턴 분석</p>
             </div>
 
-            {/* 요약 바 */}
-            <Card className='mb-6'>
-              <div className='mb-3 flex items-center justify-between'>
-                <div className='text-lg font-bold'>
-                  총 팀원: <span className='text-purple-400'>{totalMembers}</span>명
+            {/* 요약 바 (sticky) */}
+            <div className='sticky top-16 z-10 mb-6 bg-[#0f0a1f] pb-4 pt-2'>
+              <Card>
+                <div className='mb-3 flex items-center justify-between'>
+                  <div className='text-lg font-bold'>
+                    총 팀원: <span className='text-purple-400'>{totalMembers}</span>명
+                  </div>
+                  <Button size='sm' disabled={!canAnalyze} onClick={handleAnalyze}>
+                    ✨ 분석하기
+                  </Button>
                 </div>
-                <Button size='sm' disabled={!canAnalyze} onClick={handleAnalyze}>
-                  ✨ 분석하기
-                </Button>
-              </div>
-              <div className='flex flex-wrap gap-2'>
-                {totalMembers === 0 ? (
-                  <span className='text-sm text-gray-500'>아래에서 팀원 유형을 선택하세요</span>
-                ) : (
-                  Object.entries(composition).map(([typeId, count]) => {
-                    if (!count) return null;
-                    const type = DEV_TYPES[typeId as keyof typeof DEV_TYPES];
-                    if (!type) return null;
-                    return (
-                      <Badge key={typeId} variant='default'>
-                        {type.name} × {count}
-                      </Badge>
-                    );
-                  })
-                )}
-              </div>
-            </Card>
+                <div className='flex flex-wrap gap-2'>
+                  {totalMembers === 0 ? (
+                    <span className='text-sm text-gray-500'>아래에서 팀원 유형을 선택하세요</span>
+                  ) : (
+                    Object.entries(composition).map(([typeId, count]) => {
+                      if (!count) return null;
+                      const type = DEV_TYPES[typeId as keyof typeof DEV_TYPES];
+                      if (!type) return null;
+                      return (
+                        <Badge key={typeId} variant='default'>
+                          {type.name} × {count}
+                        </Badge>
+                      );
+                    })
+                  )}
+                </div>
+              </Card>
+            </div>
 
             {/* 유형 그리드 */}
             <div className='mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3'>

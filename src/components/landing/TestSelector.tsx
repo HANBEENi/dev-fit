@@ -27,8 +27,8 @@ const testCards: TestCardData[] = [
     description:
       '상황별 질문을 통해 나의 업무 스타일과 스트레스 대처 패턴을 진단합니다. 강점, 주의점, 인지편향까지 알려드려요.',
     meta: [
-      { icon: 'clock', text: '약 5~7분' },
-      { icon: 'question', text: '32문항' },
+      { icon: 'clock', text: '약 8~10분' },
+      { icon: 'question', text: '56문항' },
       { icon: 'user', text: '개인' },
     ],
     href: '/diagnosis',
@@ -108,11 +108,15 @@ export default function TestSelector() {
                 <Button
                   fullWidth
                   icon={<Icon name='arrow-right' size={18} />}
-                  className={
+                  style={
                     card.id === 'team'
-                      ? 'bg-gradient-to-r from-[#F59E0B] to-[#F54781] shadow-orange-500/30 hover:shadow-orange-500/40'
-                      : ''
+                      ? {
+                          background: 'linear-gradient(to right, #F59E0B, #F54781)',
+                          boxShadow: '0 0 20px rgba(245, 158, 11, 0.3)',
+                        }
+                      : undefined
                   }
+                  className={card.id === 'team' ? 'hover:shadow-orange-500/40' : ''}
                 >
                   {card.id === 'diagnosis' ? '테스트 시작' : '분석 시작'}
                 </Button>
