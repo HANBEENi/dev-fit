@@ -1,10 +1,11 @@
-import { LikertQuestion } from '@/types';
+import { LikertQuestion, JobRole } from '@/types';
 import { Card, ProgressBar } from '@/components/common';
 import { TEST_CONFIG } from '@/constants';
 import { cn } from '@/lib/utils';
 
 interface LikertQuestionCardProps {
   question: LikertQuestion;
+  selectedRole: JobRole;
   currentProgress: number;
   totalQuestions: number;
   previousAnswer: number | null;
@@ -15,6 +16,7 @@ interface LikertQuestionCardProps {
 
 export default function LikertQuestionCard({
   question,
+  selectedRole,
   currentProgress,
   totalQuestions,
   previousAnswer,
@@ -23,6 +25,10 @@ export default function LikertQuestionCard({
   onBack,
 }: LikertQuestionCardProps) {
   const { labels } = TEST_CONFIG.likertScale;
+
+  // 직무별 텍스트 가져오기
+  const questionText =
+    typeof question.text === 'string' ? question.text : question.text[selectedRole];
 
   return (
     <div className='mx-auto max-w-lg'>
@@ -38,7 +44,7 @@ export default function LikertQuestionCard({
 
       {/* 질문 */}
       <Card className='mb-6'>
-        <p className='text-center text-lg font-semibold leading-relaxed'>{question.text}</p>
+        <p className='text-center text-lg font-semibold leading-relaxed'>{questionText}</p>
       </Card>
 
       {/* 리커트 척도 */}

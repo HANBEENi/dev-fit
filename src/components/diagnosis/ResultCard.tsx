@@ -1,16 +1,31 @@
 import { Card } from '@/components/common';
-import { DevType, StressType } from '@/types';
+import { DevType, StressType, JobRole } from '@/types';
 
 interface ResultCardProps {
   devType: DevType;
   stressType: StressType;
+  selectedRole?: JobRole;
 }
 
-export default function ResultCard({ devType, stressType }: ResultCardProps) {
+const roleLabels: Record<JobRole, string> = {
+  frontend: 'Frontend 개발자',
+  backend: 'Backend 개발자',
+  designer: '디자이너',
+  pm: 'PM·기획자',
+};
+
+export default function ResultCard({ devType, stressType, selectedRole }: ResultCardProps) {
   return (
     <div className='mx-auto max-w-lg space-y-4'>
       {/* 메인 결과 */}
       <Card className='text-center'>
+        {selectedRole && (
+          <div className='mb-3'>
+            <span className='inline-block rounded-full bg-purple-500/20 px-3 py-1 text-xs text-purple-400'>
+              {roleLabels[selectedRole]}
+            </span>
+          </div>
+        )}
         <div className='mb-4 text-6xl'>{devType.icon}</div>
         <h1 className='mb-5 text-2xl font-black'>{devType.name}</h1>
         <p className='mb-4 font-medium text-purple-400'>{devType.subtitle}</p>

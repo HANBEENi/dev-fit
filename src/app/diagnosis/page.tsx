@@ -18,6 +18,7 @@ import { trackDiagnosisStart, trackDiagnosisComplete } from '@/lib/gtag';
 export default function DiagnosisPage() {
   const {
     phase,
+    selectedRole,
     currentLikertQuestion,
     currentStressQuestion,
     shuffledStressOptions,
@@ -29,6 +30,7 @@ export default function DiagnosisPage() {
     currentLikertAnswer,
     currentStressAnswer,
     canGoBack,
+    selectRole,
     startTest,
     submitLikertAnswer,
     submitStressAnswer,
@@ -38,13 +40,13 @@ export default function DiagnosisPage() {
 
   // GA 이벤트 추적
   useEffect(() => {
-    if (phase === 'likert' && totalProgress === 1) {
+    if (phase === 'likert' && totalProgress === 1 && selectedRole) {
       trackDiagnosisStart();
     }
     if (phase === 'result' && resultDevType && resultStressType) {
       trackDiagnosisComplete(resultDevType, resultStressType);
     }
-  }, [phase, totalProgress, resultDevType, resultStressType]);
+  }, [phase, totalProgress, selectedRole, resultDevType, resultStressType]);
 
   return (
     <div className='min-h-screen px-4 pb-16 pt-24'>
@@ -63,11 +65,18 @@ export default function DiagnosisPage() {
 
       {/* 콘텐츠 */}
       <div className='z-14 relative'>
-        {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
+        {phase === 'intro' && (
+          <DiagnosisIntro
+            onStart={startTest}
+            selectedRole={selectedRole}
+            onRoleSelect={selectRole}
+          />
+        )}
 
-        {phase === 'likert' && currentLikertQuestion && (
+        {phase === 'likert' && currentLikertQuestion && selectedRole && (
           <LikertQuestionCard
             question={currentLikertQuestion}
+            selectedRole={selectedRole}
             currentProgress={totalProgress}
             totalQuestions={totalQuestions}
             previousAnswer={currentLikertAnswer}
@@ -101,6 +110,7 @@ export default function DiagnosisPage() {
             <ResultCard
               devType={DEV_TYPES[resultDevType]}
               stressType={STRESS_TYPES[resultStressType]}
+              selectedRole={selectedRole ?? undefined}
             />
 
             {/* 피드백 섹션 */}

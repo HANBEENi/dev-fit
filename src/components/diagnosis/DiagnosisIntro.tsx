@@ -1,8 +1,11 @@
 import { Card, Badge, Button } from '@/components/common';
 import { TEST_CONFIG } from '@/constants';
+import { JobRole } from '@/types';
 
 interface DiagnosisIntroProps {
-  onStart: () => void;
+  onStart: (role: JobRole) => void;
+  selectedRole: JobRole | null;
+  onRoleSelect: (role: JobRole) => void;
 }
 
 const features = [
@@ -19,10 +22,23 @@ const theories = [
   '팀 역학 이론',
 ];
 
-export default function DiagnosisIntro({ onStart }: DiagnosisIntroProps) {
+const roleOptions: Array<{
+  role: JobRole;
+  icon: string;
+  name: string;
+  desc: string;
+}> = [
+  { role: 'frontend', icon: '💻', name: 'Frontend', desc: '프론트엔드 개발자' },
+  { role: 'backend', icon: '⚙️', name: 'Backend', desc: '백엔드 개발자' },
+  { role: 'designer', icon: '🎨', name: 'Designer', desc: '디자이너' },
+  { role: 'pm', icon: '📋', name: 'PM·기획자', desc: '기획·프로덕트 매니저' },
+];
+
+export default function DiagnosisIntro({ onStart, selectedRole, onRoleSelect }: DiagnosisIntroProps) {
   const handleStart = () => {
+    if (!selectedRole) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    onStart();
+    onStart(selectedRole);
   };
 
   return (
@@ -80,9 +96,34 @@ export default function DiagnosisIntro({ onStart }: DiagnosisIntroProps) {
         </div>
       </Card>
 
+      {/* 직무 선택 */}
+      <Card className='mb-6'>
+        <h3 className='mb-3 text-sm font-bold text-purple-400'>👤 당신의 직무를 선택하세요</h3>
+        <p className='mb-4 text-xs text-gray-500'>
+          선택한 직무에 맞춰 문항이 표시됩니다
+        </p>
+        <div className='grid grid-cols-2 gap-3'>
+          {roleOptions.map((option) => (
+            <button
+              key={option.role}
+              onClick={() => onRoleSelect(option.role)}
+              className={`rounded-lg border-2 p-4 text-center transition-all ${
+                selectedRole === option.role
+                  ? 'border-purple-500 bg-purple-500/10'
+                  : 'border-white/10 bg-white/5 hover:border-purple-500/50'
+              }`}
+            >
+              <div className='mb-2 text-3xl'>{option.icon}</div>
+              <div className='mb-1 text-sm font-bold'>{option.name}</div>
+              <div className='text-xs text-gray-500'>{option.desc}</div>
+            </button>
+          ))}
+        </div>
+      </Card>
+
       {/* 시작 버튼 */}
-      <Button fullWidth size='lg' onClick={handleStart}>
-        진단 시작하기
+      <Button fullWidth size='lg' onClick={handleStart} disabled={!selectedRole}>
+        {selectedRole ? '진단 시작하기' : '직무를 먼저 선택하세요'}
       </Button>
     </div>
   );
