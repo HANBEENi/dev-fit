@@ -1,7 +1,22 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { SITE_CONFIG, EXTERNAL_LINKS } from '../../constants';
 
 export default function Footer() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <footer className='border-t border-purple-500/20 bg-[#0f0a1f] py-12'>
       <div className='mx-auto max-w-5xl px-5'>
@@ -9,6 +24,7 @@ export default function Footer() {
           {/* 로고 */}
           <Link
             href='/'
+            onClick={handleLogoClick}
             className='bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-2xl font-black text-transparent'
           >
             {SITE_CONFIG.name}

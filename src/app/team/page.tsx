@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useTeamAnalysis } from '@/hooks/useTeamAnalysis';
-import { DEV_TYPE_LIST } from '@/data/types';
+import { DEV_TYPE_LIST, DEV_TYPES } from '@/data/types';
 import { Card, Badge, Button } from '@/components/common';
 import {
   TypeCounter,
@@ -74,11 +74,11 @@ export default function TeamPage() {
                 ) : (
                   Object.entries(composition).map(([typeId, count]) => {
                     if (!count) return null;
-                    const type = DEV_TYPE_LIST.find((t) => t === typeId);
+                    const type = DEV_TYPES[typeId as keyof typeof DEV_TYPES];
                     if (!type) return null;
                     return (
                       <Badge key={typeId} variant='default'>
-                        {typeId} × {count}
+                        {type.name} × {count}
                       </Badge>
                     );
                   })

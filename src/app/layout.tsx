@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
-import { Analytics, Footer } from '@/components/common';
+import { Analytics, Footer, Header } from '@/components/common';
 import { SITE_CONFIG } from '@/constants';
 
 const notoSansKr = Noto_Sans_KR({
@@ -36,6 +36,7 @@ export default function RootLayout({
     <html lang='ko'>
       <body className={notoSansKr.className}>
         <Analytics />
+        <Header />
         <main className='min-h-screen'>{children}</main>
         <Footer />
       </body>

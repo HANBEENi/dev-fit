@@ -19,6 +19,10 @@ export default function ResultActions({ devType, distribution, onRestart }: Resu
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleShare = async () => {
+    // 현재 사이트 URL
+    const siteUrl = typeof window !== 'undefined' ? window.location.origin : 'https://devfit.vercel.app';
+    const shareUrl = `${siteUrl}/diagnosis?share=${devType.id}`;
+
     const text = `🧬 나의 개발자 협업 성향
 
 ${devType.icon} ${devType.name}
@@ -26,11 +30,14 @@ ${devType.icon} ${devType.name}
 
 ${devType.desc.slice(0, 80)}...
 
+👉 나도 테스트하기: ${shareUrl}
+
 #DevFit #개발자유형진단`;
 
     const success = await shareContent({
-      title: 'DevFit - 개발자 협업 성향 진단',
+      title: `DevFit - ${devType.name}`,
       text,
+      url: shareUrl,
     });
 
     if (success) {
