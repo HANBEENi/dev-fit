@@ -137,6 +137,138 @@ export const LIKERT_QUESTIONS: LikertQuestion[] = [
     text: '원칙을 고수하는 것보다 실용적인 해결책을 찾는 것이 더 중요하다고 생각한다.',
     targetType: 'flexible',
   },
+
+  // 🧭 탐구형 실험가 (explorer) - 4문항
+  {
+    id: 25,
+    text: '새로운 기술이나 라이브러리가 나오면 직접 써보고 싶어진다.',
+    targetType: 'explorer',
+  },
+  {
+    id: 26,
+    text: '기술 블로그나 컨퍼런스를 통해 최신 트렌드를 파악하는 것을 즐긴다.',
+    targetType: 'explorer',
+  },
+  {
+    id: 27,
+    text: '익숙한 방법보다 더 나은 새로운 방법이 있다면 적극적으로 시도해본다.',
+    targetType: 'explorer',
+  },
+  {
+    id: 28,
+    text: '기존 코드베이스를 개선할 수 있는 새로운 도구나 패턴을 찾으면 팀에 제안하는 편이다.',
+    targetType: 'explorer',
+  },
+
+  // 💎 완벽주의 장인 (craftsman) - 4문항
+  {
+    id: 29,
+    text: '코드를 작성할 때 동작 여부뿐만 아니라 가독성과 구조도 중요하게 생각한다.',
+    targetType: 'craftsman',
+  },
+  {
+    id: 30,
+    text: '완성도가 낮은 코드를 제출하는 것이 불편하고, 더 다듬고 싶어진다.',
+    targetType: 'craftsman',
+  },
+  {
+    id: 31,
+    text: '코드 리뷰를 할 때 네이밍, 포맷팅 등 세세한 부분까지 신경 쓰는 편이다.',
+    targetType: 'craftsman',
+  },
+  {
+    id: 32,
+    text: '작업 속도보다 결과물의 품질을 우선으로 생각한다.',
+    targetType: 'craftsman',
+  },
+
+  // 🌟 성장 지원자 (mentor) - 4문항
+  {
+    id: 33,
+    text: '동료가 막혔을 때 도와주는 것을 즐기고, 함께 성장하는 느낌이 좋다.',
+    targetType: 'mentor',
+  },
+  {
+    id: 34,
+    text: '내가 알고 있는 지식이나 노하우를 팀원들과 공유하는 것을 좋아한다.',
+    targetType: 'mentor',
+  },
+  {
+    id: 35,
+    text: '신입이나 주니어 개발자를 가르치고 성장하는 모습을 보면 뿌듯함을 느낀다.',
+    targetType: 'mentor',
+  },
+  {
+    id: 36,
+    text: '코드 리뷰를 할 때 단순히 지적하기보다 이유를 설명하고 함께 배우려 한다.',
+    targetType: 'mentor',
+  },
+
+  // 💡 창의적 혁신가 (innovator) - 4문항
+  {
+    id: 37,
+    text: '문제를 만나면 기존 방식보다 전혀 다른 창의적인 해결법을 시도해보고 싶어진다.',
+    targetType: 'innovator',
+  },
+  {
+    id: 38,
+    text: '"왜 항상 이렇게 했는가"라는 질문을 자주 하며, 더 나은 방법을 고민한다.',
+    targetType: 'innovator',
+  },
+  {
+    id: 39,
+    text: '남들이 생각하지 못한 독창적인 아이디어를 내는 것을 즐긴다.',
+    targetType: 'innovator',
+  },
+  {
+    id: 40,
+    text: '정형화된 틀보다 자유로운 발상으로 문제를 푸는 것을 선호한다.',
+    targetType: 'innovator',
+  },
+
+  // 🛡️ 안정성 수호자 (guardian) - 4문항
+  {
+    id: 41,
+    text: '새로운 기능을 추가할 때 기존 시스템에 미칠 영향을 먼저 걱정한다.',
+    targetType: 'guardian',
+  },
+  {
+    id: 42,
+    text: '에러 처리, 예외 상황, 보안 등을 꼼꼼하게 챙기는 편이다.',
+    targetType: 'guardian',
+  },
+  {
+    id: 43,
+    text: '빠른 배포보다 충분한 테스트와 검증을 거친 안정적인 배포를 선호한다.',
+    targetType: 'guardian',
+  },
+  {
+    id: 44,
+    text: '장애가 발생하지 않도록 사전에 리스크를 파악하고 예방하는 것을 중요하게 생각한다.',
+    targetType: 'guardian',
+  },
+
+  // ⚡ 효율 최적화자 (optimizer) - 4문항
+  {
+    id: 45,
+    text: '코드가 동작하더라도 더 빠르고 효율적으로 만들 방법을 고민하게 된다.',
+    targetType: 'optimizer',
+  },
+  {
+    id: 46,
+    text: '성능 프로파일링 결과나 메트릭을 보면서 개선점을 찾는 것을 좋아한다.',
+    targetType: 'optimizer',
+  },
+  {
+    id: 47,
+    text: '불필요한 연산이나 리소스 낭비를 발견하면 최적화하고 싶어진다.',
+    targetType: 'optimizer',
+  },
+  {
+    id: 48,
+    text: '알고리즘 복잡도나 성능 개선에 관심이 많고, 이를 위한 리팩토링을 즐긴다.',
+    targetType: 'optimizer',
+  },
 ];
 
 // ========================================
@@ -145,7 +277,7 @@ export const LIKERT_QUESTIONS: LikertQuestion[] = [
 
 export const STRESS_QUESTIONS: ScenarioQuestion[] = [
   {
-    id: 25,
+    id: 49,
     text: '마감이 촉박하고 일이 밀릴 때 당신은 어떻게 반응하나요?',
     options: [
       { text: '다른 사람에게 맡기기보다 내가 직접 처리하려고 합니다', value: 'responsibility' },
@@ -155,7 +287,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 26,
+    id: 50,
     text: '내 코드나 결정에 대해 부정적인 피드백을 받았을 때 당신은?',
     options: [
       { text: '왜 그런 선택을 했는지 배경을 설명하고 싶어집니다', value: 'rationalize' },
@@ -165,7 +297,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 27,
+    id: 51,
     text: '예상치 못한 장애나 긴급 상황이 발생하면 당신은?',
     options: [
       { text: '내가 나서서 해결해야 한다는 책임감이 먼저 듭니다', value: 'responsibility' },
@@ -175,7 +307,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 28,
+    id: 52,
     text: '팀 내에서 의견 충돌이나 갈등이 생기면 당신은?',
     options: [
       { text: '관계가 틀어지지 않도록 먼저 대화를 시도합니다', value: 'connection' },
@@ -185,7 +317,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 29,
+    id: 53,
     text: '업무가 과중하거나 지칠 때 당신은 어떻게 하나요?',
     options: [
       { text: '힘들어도 맡은 일은 끝까지 해내려고 합니다', value: 'responsibility' },
@@ -195,7 +327,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 30,
+    id: 54,
     text: '역할이 불명확하거나 기대하는 바가 애매할 때 당신은?',
     options: [
       { text: '일단 할 수 있는 것부터 내가 챙기게 됩니다', value: 'responsibility' },
@@ -205,7 +337,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 31,
+    id: 55,
     text: '열심히 했는데 성과가 인정받지 못한다고 느낄 때 당신은?',
     options: [
       { text: '어떤 과정으로 진행했는지 공유하고 싶어집니다', value: 'rationalize' },
@@ -215,7 +347,7 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
     ],
   },
   {
-    id: 32,
+    id: 56,
     text: '상황이 내 예상대로 흘러가지 않을 때 당신은?',
     options: [
       { text: '계획을 더 세밀하게 수정하고 관리하려 합니다', value: 'control' },
@@ -227,6 +359,6 @@ export const STRESS_QUESTIONS: ScenarioQuestion[] = [
 ];
 
 // 전체 문항 수
-export const LIKERT_QUESTION_COUNT = LIKERT_QUESTIONS.length; // 24
+export const LIKERT_QUESTION_COUNT = LIKERT_QUESTIONS.length; // 48 (12가지 유형 × 4문항)
 export const STRESS_QUESTION_COUNT = STRESS_QUESTIONS.length; // 8
-export const TOTAL_QUESTION_COUNT = LIKERT_QUESTION_COUNT + STRESS_QUESTION_COUNT; // 32
+export const TOTAL_QUESTION_COUNT = LIKERT_QUESTION_COUNT + STRESS_QUESTION_COUNT; // 56

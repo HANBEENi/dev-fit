@@ -29,6 +29,7 @@ export const TEST_CONFIG = {
   stressQuestionCount: 8,
   totalQuestionCount: 32,
   minTeamSize: 2,
+  maxTeamSize: 15,
   maxTypeCount: 10,
   likertScale: {
     min: 1,

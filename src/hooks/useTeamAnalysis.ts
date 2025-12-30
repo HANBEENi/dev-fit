@@ -17,19 +17,29 @@ export function useTeamAnalysis() {
   const canAnalyze = totalMembers >= TEST_CONFIG.minTeamSize;
 
   // 인원 수 변경
-  const updateCount = useCallback((typeId: DevTypeId, delta: number) => {
-    setComposition((prev) => {
-      const current = prev[typeId] || 0;
-      const newValue = Math.max(0, Math.min(TEST_CONFIG.maxTypeCount, current + delta));
+  const updateCount = useCallback(
+    (typeId: DevTypeId, delta: number) => {
+      setComposition((prev) => {
+        const current = prev[typeId] || 0;
+        const currentTotal = getTotalTeamSize(prev);
 
-      if (newValue === 0) {
-        const { [typeId]: _, ...rest } = prev;
-        return rest;
-      }
+        // 증가 시도 시 전체 팀 크기 체크
+        if (delta > 0 && currentTotal >= TEST_CONFIG.maxTeamSize) {
+          return prev; // 최대 팀 크기 도달, 변경 없음
+        }
 
-      return { ...prev, [typeId]: newValue };
-    });
-  }, []);
+        const newValue = Math.max(0, Math.min(TEST_CONFIG.maxTypeCount, current + delta));
+
+        if (newValue === 0) {
+          const { [typeId]: _, ...rest } = prev;
+          return rest;
+        }
+
+        return { ...prev, [typeId]: newValue };
+      });
+    },
+    [totalMembers],
+  );
 
   // 분석 시작
   const analyze = useCallback(() => {
@@ -87,18 +97,48 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   const analyst = c.analyst || 0;
   const solver = c.solver || 0;
   const flex = c.flexible || 0;
+  const explorer = c.explorer || 0;
+  const craftsman = c.craftsman || 0;
+  const mentor = c.mentor || 0;
+  const innovator = c.innovator || 0;
+  const guardian = c.guardian || 0;
+  const optimizer = c.optimizer || 0;
 
-  // 팀 이름 생성
+  // 팀 이름 생성 (29가지 패턴)
   let teamName = '🚀 개발팀';
+
+  // 1. 극단 케이스 (3명 이상 동일 유형) - 12가지
   if (exec >= 3) teamName = '⚡💥 초고속 기술부채 생산팀';
   else if (struct >= 3) teamName = '🏗️📐 영원한 설계 회의팀';
   else if (collab >= 3) teamName = '🤝💬 회의는 많고 결론은 없는 팀';
   else if (analyst >= 3) teamName = '🔍🐢 분석 마비 위험팀';
   else if (solver >= 3) teamName = '🔬🏝️ 각자 섬에서 코딩하는 팀';
+  else if (flex >= 3) teamName = '🌊🎭 원칙 없는 카멜레온팀';
+  else if (explorer >= 3) teamName = '🧪🚀 끝없는 실험실팀';
+  else if (craftsman >= 3) teamName = '⚙️🔍 완벽주의 병목팀';
+  else if (mentor >= 3) teamName = '🌱💬 가르치느라 일 못하는 팀';
+  else if (innovator >= 3) teamName = '💡🎨 혁신만 하다 출시 못하는 팀';
+  else if (guardian >= 3) teamName = '🛡️🐌 안전제일 거북이팀';
+  else if (optimizer >= 3) teamName = '⚡📊 최적화 집착팀';
+  // 2. 균형잡힌 조합 - 10가지
   else if (exec >= 2 && struct >= 1) teamName = '⚡🏗️ 설계-실행 균형팀';
   else if (collab >= 2 && flex >= 1) teamName = '🤝🌊 완벽한 조율팀';
   else if (exec >= 1 && analyst >= 1) teamName = '🔥🔍 속도와 품질의 균형팀';
   else if (solver >= 2 && collab >= 1) teamName = '🔬🤝 집중력과 협업의 조화팀';
+  else if (innovator >= 2 && guardian >= 1) teamName = '💡🛡️ 혁신과 안정의 균형팀';
+  else if (explorer >= 2 && craftsman >= 1) teamName = '🧪⚙️ 실험과 완성도의 조화팀';
+  else if (mentor >= 2 && optimizer >= 1) teamName = '🌱⚡ 성장과 효율의 시너지팀';
+  else if (exec >= 1 && guardian >= 1 && optimizer >= 1) teamName = '⚡🛡️⚡ 속도-안전-효율 삼박자팀';
+  else if (struct >= 1 && analyst >= 1 && craftsman >= 1) teamName = '🏗️🔍⚙️ 완벽 추구 드림팀';
+  else if (mentor >= 1 && collab >= 1 && flex >= 1) teamName = '🌱🤝🌊 최고의 팀워크팀';
+  // 3. 2인 단일 유형팀 - 6가지
+  else if (total === 2 && explorer >= 2) teamName = '🧪🧪 미친 과학자 듀오';
+  else if (total === 2 && craftsman >= 2) teamName = '⚙️⚙️ 장인 듀오';
+  else if (total === 2 && mentor >= 2) teamName = '🌱🌱 성장 촉진 듀오';
+  else if (total === 2 && innovator >= 2) teamName = '💡💡 혁신가 듀오';
+  else if (total === 2 && guardian >= 2) teamName = '🛡️🛡️ 안전 수호 듀오';
+  else if (total === 2 && optimizer >= 2) teamName = '⚡⚡ 효율 극대화 듀오';
+  // 4. 일반 케이스
   else if (flex >= 2) teamName = '🌊✨ 유연한 적응팀';
 
   // 강점 분석
@@ -119,6 +159,12 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   if (analyst >= 1) strengths.push('꼼꼼한 검토와 품질 보장 능력을 갖추고 있습니다');
   if (solver >= 1) strengths.push('복잡한 문제 해결 능력이 뛰어납니다');
   if (flex >= 1) strengths.push('변화에 유연한 대응이 가능합니다');
+  if (explorer >= 1) strengths.push('새로운 기술 탐색과 실험 능력이 뛰어납니다');
+  if (craftsman >= 1) strengths.push('높은 코드 품질과 완성도를 추구합니다');
+  if (mentor >= 1) strengths.push('팀원 성장과 지식 공유에 강점이 있습니다');
+  if (innovator >= 1) strengths.push('창의적 문제 해결과 혁신 능력이 탁월합니다');
+  if (guardian >= 1) strengths.push('안정성과 보안에 대한 철저한 검증 능력이 있습니다');
+  if (optimizer >= 1) strengths.push('성능 최적화와 효율성 개선에 뛰어납니다');
 
   const strength =
     strengths.length > 0 ? strengths.join('. ') + '.' : '팀원들의 다양성이 강점입니다.';
@@ -135,6 +181,18 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
     weaknesses.push('🚨 <strong>위험:</strong> 분석 마비로 의사결정이 지연될 수 있습니다');
   if (solver >= 3 && collab === 0)
     weaknesses.push('🚨 <strong>위험:</strong> 각자 몰입하다 팀 협업이 붕괴될 수 있습니다');
+  if (explorer >= 3)
+    weaknesses.push('🚨 <strong>위험:</strong> 실험만 하다 실제 출시가 지연될 수 있습니다');
+  if (craftsman >= 3)
+    weaknesses.push('🚨 <strong>위험:</strong> 완벽 추구로 인해 출시가 계속 미뤄질 수 있습니다');
+  if (mentor >= 3 && exec === 0)
+    weaknesses.push('가르치는 데 집중하다 실제 개발이 지연될 수 있습니다');
+  if (innovator >= 3)
+    weaknesses.push('🚨 <strong>위험:</strong> 혁신에만 몰두하다 기본 기능 구현이 소홀해질 수 있습니다');
+  if (guardian >= 3 && exec === 0)
+    weaknesses.push('안정성 검증에만 집중하다 출시 속도가 느려질 수 있습니다');
+  if (optimizer >= 3)
+    weaknesses.push('최적화에 집착하다 핵심 기능 개발이 지연될 수 있습니다');
   if (collab === 0 && total >= 4)
     weaknesses.push('갈등 조정자 부재로 충돌 시 해결이 어려울 수 있습니다');
   if (flex === 0 && total >= 5) weaknesses.push('변화 대응력이 부족할 수 있습니다');
@@ -188,6 +246,30 @@ function generateTeamAnalysis(composition: TeamComposition): TeamAnalysis {
   if (solver >= 2)
     biases.push(
       '<strong>터널 시야</strong> - 다른 맥락을 놓칠 수 있습니다. 주 1회 전체 그림 리뷰 시간을 가지세요.',
+    );
+  if (explorer >= 2)
+    biases.push(
+      '<strong>새로운 것 편향</strong> - 검증되지 않은 기술에 끌릴 수 있습니다. "프로덕션 적용 전 2주 검증" 규칙을 정하세요.',
+    );
+  if (craftsman >= 2)
+    biases.push(
+      '<strong>완벽주의 함정</strong> - "충분히 좋음"을 인정하지 못합니다. "80% 완성도면 출시" 기준을 세우세요.',
+    );
+  if (mentor >= 2)
+    biases.push(
+      '<strong>가르침 중독</strong> - 모든 것을 설명하려 듭니다. 팀원 자율성을 존중하고 필요할 때만 개입하세요.',
+    );
+  if (innovator >= 2)
+    biases.push(
+      '<strong>혁신 편향</strong> - 기존 방식을 과소평가할 수 있습니다. "이미 잘 작동하는가?" 먼저 확인하세요.',
+    );
+  if (guardian >= 2)
+    biases.push(
+      '<strong>과잉 방어</strong> - 모든 엣지 케이스를 방어하려 듭니다. 위험도에 따라 우선순위를 정하세요.',
+    );
+  if (optimizer >= 2)
+    biases.push(
+      '<strong>조기 최적화</strong> - 병목이 아닌 곳을 최적화할 수 있습니다. 프로파일링 후 최적화하세요.',
     );
 
   const biasRisk =
@@ -344,6 +426,113 @@ function generateAdviceList(composition: TeamComposition): TypeAdvice[] {
           });
         }
         tips.push({ text: '핵심 원칙 2-3개는 지키면서 나머지에서 유연하게 대응하세요.' });
+        break;
+
+      case 'explorer':
+        tips.push({
+          text: '새로운 기술 실험 전에 프로덕션 영향도를 먼저 평가하세요. POC 단계를 거쳐야 합니다.',
+        });
+        if (composition.guardian) {
+          tips.push({
+            text: `안정성 수호자 ${composition.guardian}명과 협의하며 실험하세요. 안전장치를 함께 설계하세요.`,
+          });
+        } else {
+          tips.push({
+            text: '팀에 안정성 검증자가 없습니다. 실험 전 롤백 계획을 반드시 세우세요.',
+            level: 'warning',
+          });
+        }
+        if (count >= 2) {
+          tips.push({ text: '실험 기간을 정하고, 그 안에 검증 후 프로덕션 적용을 결정하세요.' });
+        }
+        break;
+
+      case 'craftsman':
+        tips.push({
+          text: '"완벽"보다 "충분히 좋음"의 기준을 정하세요. 80% 품질로 출시 후 개선하는 것도 전략입니다.',
+        });
+        if (composition.executor) {
+          tips.push({
+            text: `돌진형 ${composition.executor}명의 속도를 존중하세요. 핵심 품질 기준만 지키고 나머지는 허용하세요.`,
+          });
+        }
+        if (count >= 2) {
+          tips.push({
+            text: '품질 기준을 문서화하고, 그 이상의 완벽 추구는 별도 시간에 진행하세요.',
+          });
+        }
+        break;
+
+      case 'mentor':
+        tips.push({
+          text: '팀원이 스스로 성장할 기회를 주세요. 답을 주기보다 질문으로 유도하는 것이 효과적입니다.',
+        });
+        if (composition.executor) {
+          tips.push({
+            text: `돌진형 ${composition.executor}명은 빠른 피드백을 원합니다. 긴 설명보다 핵심만 간결하게 전달하세요.`,
+          });
+        }
+        if (count >= 2) {
+          tips.push({
+            text: '가르치는 시간과 개발 시간을 명확히 구분하세요. 교육이 업무를 방해하지 않게 하세요.',
+          });
+        }
+        break;
+
+      case 'innovator':
+        tips.push({
+          text: '혁신적 아이디어를 제안할 때 구현 비용과 효과를 함께 제시하세요. 실현 가능성이 중요합니다.',
+        });
+        if (composition.guardian) {
+          tips.push({
+            text: `안정성 수호자 ${composition.guardian}명과 협업하세요. 혁신과 안정의 균형이 최고의 결과를 만듭니다.`,
+          });
+        } else {
+          tips.push({
+            text: '팀에 안정성 검증자가 없습니다. 혁신적 변경 전 리스크 분석을 스스로 수행하세요.',
+            level: 'warning',
+          });
+        }
+        if (count >= 2) {
+          tips.push({ text: '혁신 아이디어는 주 1회 모아서 우선순위를 정하고 선택적으로 적용하세요.' });
+        }
+        break;
+
+      case 'guardian':
+        tips.push({
+          text: '모든 위험을 방어할 수는 없습니다. 위험도에 따라 우선순위를 정하고 핵심만 방어하세요.',
+        });
+        if (composition.executor || composition.innovator) {
+          tips.push({
+            text: '실행형/혁신형의 속도를 존중하세요. 치명적 위험만 제동을 걸고 나머지는 모니터링하세요.',
+          });
+        }
+        if (count >= 2) {
+          tips.push({
+            text: '안전 점검 체크리스트를 만들어 효율화하세요. 매번 모든 것을 검토할 필요는 없습니다.',
+          });
+        }
+        break;
+
+      case 'optimizer':
+        tips.push({
+          text: '프로파일링 없는 최적화는 금물입니다. 병목을 측정한 후 최적화하세요.',
+        });
+        if (composition.executor) {
+          tips.push({
+            text: `돌진형 ${composition.executor}명이 구현한 후 최적화하세요. 미리 최적화하면 시간 낭비입니다.`,
+          });
+        } else {
+          tips.push({
+            text: '팀에 빠른 실행형이 없습니다. 최적화보다 먼저 동작하는 코드를 만드는 데 집중하세요.',
+            level: 'warning',
+          });
+        }
+        if (count >= 2) {
+          tips.push({
+            text: '최적화 목표(응답 시간, 메모리 등)를 수치로 정하고, 목표 달성 시 멈추세요.',
+          });
+        }
         break;
     }
 
