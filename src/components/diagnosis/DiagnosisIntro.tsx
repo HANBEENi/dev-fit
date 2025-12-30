@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import { Card, Badge, Button } from '@/components/common';
 import { TEST_CONFIG } from '@/constants';
 import { JobRole } from '@/types';
@@ -35,10 +36,14 @@ const roleOptions: Array<{
 ];
 
 export default function DiagnosisIntro({ onStart, selectedRole, onRoleSelect }: DiagnosisIntroProps) {
+  const router = useRouter();
+
   const handleStart = () => {
     if (!selectedRole) return;
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onStart(selectedRole);
+    // URL 파라미터로 직무를 전달하며 이동
+    router.push(`/diagnosis/test?role=${selectedRole}`);
   };
 
   return (
