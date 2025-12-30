@@ -47,7 +47,7 @@ export default function DiagnosisPage() {
   }, [phase, totalProgress, resultDevType, resultStressType]);
 
   return (
-    <div className='min-h-screen px-4 pb-16 pt-8'>
+    <div className='min-h-screen px-4 pb-16 pt-24'>
       {/* 배경 */}
       <div className='pointer-events-none fixed inset-0'>
         <div
@@ -62,7 +62,7 @@ export default function DiagnosisPage() {
       </div>
 
       {/* 콘텐츠 */}
-      <div className='z-14 relative mt-12'>
+      <div className='z-14 relative'>
         {phase === 'intro' && <DiagnosisIntro onStart={startTest} />}
 
         {phase === 'likert' && currentLikertQuestion && (

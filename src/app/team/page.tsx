@@ -40,7 +40,7 @@ export default function TeamPage() {
   };
 
   return (
-    <div className='min-h-screen px-4 pb-16 pt-8'>
+    <div className='min-h-screen px-4 pb-16 pt-24'>
       <div className='mx-auto max-w-3xl'>
         {/* 선택 화면 */}
         {phase === 'select' && (
