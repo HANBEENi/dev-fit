@@ -37,6 +37,8 @@ export default function TeamPage() {
   const handleAnalyze = () => {
     trackTeamAnalysisStart();
     analyze();
+    // 분석 결과 페이지로 전환 시 맨 위로 스크롤
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
