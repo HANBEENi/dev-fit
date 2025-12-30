@@ -67,58 +67,57 @@ export default function TestSelector() {
         {/* 테스트 카드 */}
         <div className='grid gap-6 md:grid-cols-2'>
           {testCards.map((card) => (
-            <Card
-              key={card.id}
-              variant='interactive'
-              padding='lg'
-              className={`group relative overflow-hidden ${
-                card.id === 'team' ? 'hover:!border-orange-400 hover:!shadow-orange-400/10' : ''
-              }`}
-            >
-              {/* 라이트 효과 (호버 시 표시) */}
-              <div className='pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100'>
-                {card.id === 'diagnosis' ? (
-                  <>
-                    <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-purple-500/80 via-pink-500/50 to-transparent blur-3xl' />
-                    <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent' />
-                  </>
-                ) : (
-                  <>
-                    <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-orange-500/80 via-amber-500/50 to-transparent blur-3xl' />
-                    <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-200 to-transparent' />
-                  </>
-                )}
-              </div>
+            <Link key={card.id} href={card.href} className='block'>
+              <Card
+                variant='interactive'
+                padding='lg'
+                className={`group relative overflow-hidden ${
+                  card.id === 'team' ? 'hover:!border-orange-400 hover:!shadow-orange-400/10' : ''
+                }`}
+              >
+                {/* 라이트 효과 (호버 시 표시) */}
+                <div className='pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100'>
+                  {card.id === 'diagnosis' ? (
+                    <>
+                      <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-purple-500/80 via-pink-500/50 to-transparent blur-3xl' />
+                      <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400 to-transparent' />
+                    </>
+                  ) : (
+                    <>
+                      <div className='absolute -top-10 left-1/2 h-32 w-3/4 -translate-x-1/2 bg-gradient-to-b from-orange-500/80 via-amber-500/50 to-transparent blur-3xl' />
+                      <div className='absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-orange-200 to-transparent' />
+                    </>
+                  )}
+                </div>
 
-              {/* 뱃지 */}
-              <Badge variant={card.badgeVariant} className='mb-4'>
-                {card.badge}
-              </Badge>
+                {/* 뱃지 */}
+                <Badge variant={card.badgeVariant} className='mb-4'>
+                  {card.badge}
+                </Badge>
 
-              {/* 아이콘 */}
-              <div className='mb-4 text-5xl'>{card.icon}</div>
+                {/* 아이콘 */}
+                <div className='mb-4 text-5xl'>{card.icon}</div>
 
-              {/* 제목 */}
-              <h3 className='mb-2 text-2xl font-extrabold'>{card.title}</h3>
+                {/* 제목 */}
+                <h3 className='mb-2 text-2xl font-extrabold'>{card.title}</h3>
 
-              {/* 후킹 문구 */}
-              <p className='mb-4 font-semibold text-purple-400'>{card.hook}</p>
+                {/* 후킹 문구 */}
+                <p className='mb-4 font-semibold text-purple-400'>{card.hook}</p>
 
-              {/* 설명 */}
-              <p className='mb-6 text-sm leading-relaxed text-gray-400'>{card.description}</p>
+                {/* 설명 */}
+                <p className='mb-6 text-sm leading-relaxed text-gray-400'>{card.description}</p>
 
-              {/* 메타 정보 */}
-              <div className='mb-5 flex flex-wrap gap-4 border-t border-purple-500/20 pt-4'>
-                {card.meta.map((item, index) => (
-                  <div key={index} className='flex items-center gap-1.5 text-sm text-gray-500'>
-                    <Icon name={item.icon} size={16} />
-                    <span>{item.text}</span>
-                  </div>
-                ))}
-              </div>
+                {/* 메타 정보 */}
+                <div className='mb-5 flex flex-wrap gap-4 border-t border-purple-500/20 pt-4'>
+                  {card.meta.map((item, index) => (
+                    <div key={index} className='flex items-center gap-1.5 text-sm text-gray-500'>
+                      <Icon name={item.icon} size={16} />
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
+                </div>
 
-              {/* 버튼 */}
-              <Link href={card.href}>
+                {/* 버튼 */}
                 <Button
                   fullWidth
                   icon={<Icon name='arrow-right' size={18} />}
@@ -134,8 +133,8 @@ export default function TestSelector() {
                 >
                   {card.id === 'diagnosis' ? '테스트 시작' : '분석 시작'}
                 </Button>
-              </Link>
-            </Card>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
