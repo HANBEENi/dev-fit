@@ -1,11 +1,17 @@
-// 6가지 개발자 유형
+// 12가지 개발자 유형
 export type DevTypeId =
-  | 'structure'
-  | 'executor'
-  | 'collaborator'
-  | 'analyst'
-  | 'solver'
-  | 'flexible';
+  | 'structure' // 구조 설계자
+  | 'executor' // 돌진형 실행가
+  | 'collaborator' // 협업 촉진자
+  | 'analyst' // 신중한 분석가
+  | 'solver' // 몰입형 해결사
+  | 'flexible' // 유연한 적응자
+  | 'explorer' // 탐구형 실험가
+  | 'craftsman' // 완벽주의 장인
+  | 'mentor' // 성장 지원자
+  | 'innovator' // 창의적 혁신가
+  | 'guardian' // 안정성 수호자
+  | 'optimizer'; // 효율 최적화자
 
 // 6가지 스트레스 반응 유형
 export type StressTypeId =

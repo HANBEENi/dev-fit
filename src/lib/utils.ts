@@ -1,6 +1,6 @@
 import { DevTypeId, StressTypeId, DevTypeScores, StressTypeScores } from '../types';
 
-// 점수 초기화
+// 점수 초기화 - 12가지 유형
 export function initDevTypeScores(): DevTypeScores {
   return {
     structure: 0,
@@ -9,6 +9,12 @@ export function initDevTypeScores(): DevTypeScores {
     analyst: 0,
     solver: 0,
     flexible: 0,
+    explorer: 0,
+    craftsman: 0,
+    mentor: 0,
+    innovator: 0,
+    guardian: 0,
+    optimizer: 0,
   };
 }
 

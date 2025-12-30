@@ -108,11 +108,15 @@ export default function TestSelector() {
                 <Button
                   fullWidth
                   icon={<Icon name='arrow-right' size={18} />}
-                  className={
+                  style={
                     card.id === 'team'
-                      ? 'bg-gradient-to-r from-[#F59E0B] to-[#F54781] shadow-orange-500/30 hover:shadow-orange-500/40'
-                      : ''
+                      ? {
+                          background: 'linear-gradient(to right, #F59E0B, #F54781)',
+                          boxShadow: '0 0 20px rgba(245, 158, 11, 0.3)',
+                        }
+                      : undefined
                   }
+                  className={card.id === 'team' ? 'hover:shadow-orange-500/40' : ''}
                 >
                   {card.id === 'diagnosis' ? '테스트 시작' : '분석 시작'}
                 </Button>
